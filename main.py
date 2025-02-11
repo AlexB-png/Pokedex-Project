@@ -2,9 +2,11 @@ import customtkinter as ctk
 import tkinter as tk
 import hashlib
 import pandas as pd
-import json
+import requests
+import math
 
 LoginSuccess = False
+
 
 def LoginButton():
     global Username, Password, LoginSuccess, data
@@ -15,17 +17,51 @@ def LoginButton():
     Password = hashlib.sha256(Password.encode('utf-8')).hexdigest()
     with open('passwords.csv', 'r') as data:
         data = pd.read_csv(data)
-        data = data.loc[data['username'] == Username]
-        print(data)
-        data = data.loc[data['password'] == Password]
-        print(data)
+        Username2 = data.loc[data['username'] == Username]
+        Password2 = Username2.loc[data['password'] == Password]
     if data.empty is True:
         print("Fail")
-        print(Password)
+        print(Password2)
     else:
         print("Success")
-        LoginSuccess=True
+        LoginSuccess = True
         Login.destroy()
+
+
+def PokeInput():
+    global fail
+    data = pd.read_csv('passwords.csv')
+    print(data)
+    Selection = PokeInputText.get('1.0', tk.END)
+    PokeInputText.delete('1.0', tk.END)
+    if Selection.strip() == "":
+        print("Input a pokemon")
+    else:
+        URL = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        Response = requests.get(URL)
+        if Response.status_code != 200:
+            print(Response.status_code)
+            print("Server does not exist")
+            fail = True
+        else:
+            fail = False
+        if fail is False:
+            Number = 1
+            local = 'This is just here so the loop doesn"t break lmao'
+            while pd.isna(local) is False and Number < 7:
+                loca = ((f"poke{Number}").strip())
+                local = data[loca].iloc[0]
+                if pd.isna(local) is True:
+                    Replaced = data.loc[Username, Number] = Selection
+                    print(Replaced)
+                    print("Empty")
+                else:
+                    Number += 1
+
+
+def NewPokemon():
+    KillPokemon = ctk.CTkToplevel()
+    KillPokemon.title('"Replace" a pokemon')
 
 
 # Login Window #
@@ -37,7 +73,7 @@ UsernameLabel = ctk.CTkLabel(Login, text="Username:")
 PasswordLabel = ctk.CTkLabel(Login, text="Password:")
 
 # Input Button #
-EnterButton = ctk.CTkButton(Login, text="Login", command = LoginButton)
+EnterButton = ctk.CTkButton(Login, text="Login", command=LoginButton)
 
 # Entry Boxes #
 UsernameEntry = ctk.CTkEntry(Login)
@@ -74,9 +110,10 @@ if LoginSuccess is True:
     # Input Pokemon #
     PokeLabel = ctk.CTkLabel(Main, text="Input Pokemon here:", pady=50)
     PokeLabel.grid(row=1, column=0)
-    PokeInput = ctk.CTkTextbox(Main, width=300, height=10)
-    PokeInput.grid(row=1, column=1)
-    PokeInputButton = ctk.CTkButton(Main)
+    PokeInputText = ctk.CTkTextbox(Main, width=300, height=10)
+    PokeInputText.grid(row=1, column=1)
+    PokeInputButton = ctk.CTkButton(Main, text="Enter", command=PokeInput)
+    PokeInputButton.grid(row=1, column=2)
 
     # Labels for pokemon #
     PokeLabelArray = ['Label1','Label2','Label3','Label4','Label5','Label6']
@@ -94,7 +131,4 @@ if LoginSuccess is True:
         label = ctk.CTkLabel(Main, text=value, font=('arial', 25))
         label.grid(row=rowselect, column=1, padx=100)
         rowselect += 1
-
-
     Main.mainloop()
-
