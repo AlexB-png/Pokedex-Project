@@ -3,9 +3,21 @@ import tkinter as tk
 import hashlib
 import pandas as pd
 import requests
-import math
 
 LoginSuccess = False
+
+
+def button1():
+    global fail, selection
+    print('pokemon 1 replaced')
+    PokeInput()
+    if fail is False:
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke1'] = Selection
+        print(data)
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
 
 
 def LoginButton():
@@ -19,9 +31,8 @@ def LoginButton():
         data = pd.read_csv(data)
         Username2 = data.loc[data['username'] == Username]
         Password2 = Username2.loc[data['password'] == Password]
-    if data.empty is True:
+    if Password2.empty is True:
         print("Fail")
-        print(Password2)
     else:
         print("Success")
         LoginSuccess = True
@@ -29,34 +40,25 @@ def LoginButton():
 
 
 def PokeInput():
-    global fail
-    data = pd.read_csv('passwords.csv')
-    print(data)
+    global fail, Selection, PokemonName, PokemonSprite
     Selection = PokeInputText.get('1.0', tk.END)
     PokeInputText.delete('1.0', tk.END)
     if Selection.strip() == "":
         print("Input a pokemon")
     else:
-        URL = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
-        Response = requests.get(URL)
-        if Response.status_code != 200:
-            print(Response.status_code)
+        url = "https://pokeapi.co/api/v2/pokemon/" + Selection
+        url = url.strip()
+        url_response = requests.get(url)
+        if url_response.status_code != 200:
             print("Server does not exist")
+            print(url)
             fail = True
         else:
+            print("Success")
+            JsonFile = url_response.json()
+            PokemonName = JsonFile['name']
+            PokemonSprite = JsonFile['sprites']['front_default']
             fail = False
-        if fail is False:
-            Number = 1
-            local = 'This is just here so the loop doesn"t break lmao'
-            while pd.isna(local) is False and Number < 7:
-                loca = ((f"poke{Number}").strip())
-                local = data[loca].iloc[0]
-                if pd.isna(local) is True:
-                    Replaced = data.loc[Username, Number] = Selection
-                    print(Replaced)
-                    print("Empty")
-                else:
-                    Number += 1
 
 
 def NewPokemon():
@@ -112,8 +114,6 @@ if LoginSuccess is True:
     PokeLabel.grid(row=1, column=0)
     PokeInputText = ctk.CTkTextbox(Main, width=300, height=10)
     PokeInputText.grid(row=1, column=1)
-    PokeInputButton = ctk.CTkButton(Main, text="Enter", command=PokeInput)
-    PokeInputButton.grid(row=1, column=2)
 
     # Labels for pokemon #
     PokeLabelArray = ['Label1','Label2','Label3','Label4','Label5','Label6']
@@ -123,12 +123,24 @@ if LoginSuccess is True:
             i.grid(row=x+1, column=0)
 
     SelectPokeArray = ['poke1','poke2','poke3','poke4','poke5','poke6']
-    rowselect=2
+    rowselect = 2
     for i in SelectPokeArray:
         value = data[i].iloc[0]
         value = str(value)
-        print(value)
         label = ctk.CTkLabel(Main, text=value, font=('arial', 25))
         label.grid(row=rowselect, column=1, padx=100)
         rowselect += 1
+
+    ReplaceButtonArray = {
+        'button1': button1,
+        'button2': button1,
+        'button3': button1,
+        'button4': button1,
+        'button5': button1,
+        'button6': button1
+    } 
+    for i, func in ReplaceButtonArray.items():
+        for x in range(1, 7):  
+            button = ctk.CTkButton(Main, command=func, text=f"Pokemon {x}")
+            button.grid(row=x+1, column=2, padx=100, pady=20)
     Main.mainloop()
