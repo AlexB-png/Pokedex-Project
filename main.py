@@ -4,9 +4,14 @@ import hashlib
 import pandas as pd
 import requests
 import time
+from PIL import Image
+import io
 
 LoginSuccess = False
 NewloginVariable = False
+IWantMoreInfoNOW = False
+
+Movelist = []
 
 
 def button1():
@@ -159,8 +164,6 @@ def EnterNewData():
                 time.sleep(0.1)
             StatusNewLogin.configure(text="Input some text!", text_color='purple', font=('ariel', 20, 'bold'))
             StatusNewLogin.update()
-            
-            
 
 
 def NewLogin():
@@ -201,7 +204,7 @@ def NewLogin():
 
 
 def PokeInput():
-    global fail, Selection, PokemonName, PokemonSprite
+    global fail, Selection
     Selection = PokeInputText.get('1.0', tk.END)
     PokeInputText.delete('1.0', tk.END)
     if Selection.strip() == "":
@@ -220,20 +223,100 @@ def PokeInput():
             fail = True
         else:
             print("Success")
-            JsonFile = url_response.json()
-            PokemonName = JsonFile['name']
-            PokemonSprite = JsonFile['sprites']['front_default']
             fail = False
 
 
-def NewPokemon():
-    KillPokemon = ctk.CTkToplevel()
-    KillPokemon.title('"Replace" a pokemon')
+def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
+    global SelectBox, PokeActualImage, AccNameLabel, MoveLabel
+    Info = ctk.CTkToplevel()
+    Info.resizable(0, 0)  # Dont even try resizing #
+    Info.attributes('-topmost', True)
+
+    frame_left = ctk.CTkFrame(Info, fg_color="red")
+    frame_left.grid(row=0, column=0, sticky="nsew", rowspan=50)
+
+    frame_middle = ctk.CTkFrame(Info, fg_color="white")
+    frame_middle.grid(row=0, column=1, sticky="nsew", rowspan=50)
+
+    frame_right = ctk.CTkFrame(Info, fg_color="red")
+    frame_right.grid(row=0, column=2, sticky="nsew", rowspan=50)
+
+    # Lower the frames #
+    frame_left.lower()
+    frame_middle.lower()
+    frame_right.lower()
+
+    for i in range(1,5):
+        Info.rowconfigure(i)
+
+    # Modules #
+    SelectLabel = ctk.CTkLabel(Info, text='Input Pokemon Here!')
+    SelectLabel.grid(row=0, column=0)
+
+    SelectBox = ctk.CTkEntry(Info, width=200, height=5)
+    SelectBox.grid(row=0, column=1, padx=20)
+
+    SelectButton = ctk.CTkButton(Info, text='Input!', command=CheckIfOnline)
+    SelectButton.grid(row=0, column=2)
+
+    # Pre Labels ( Before updates) #
+
+    # Image of selection #
+    PokeLabelImage = ctk.CTkLabel(Info, text='Pokemon Image:')
+    PokeLabelImage.grid(row=1, column=0, pady=30)
+    PokeActualImage = ctk.CTkLabel(Info, text="")
+    PokeActualImage.grid(row=1, column=1)
+
+    # Name of Selection #
+    PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon")
+    PokeNameLabel.grid(row=2, column=0, pady=20)
+    AccNameLabel = ctk.CTkLabel(Info, text='')
+    AccNameLabel.grid(row=2, column=1)
+
+    # MoveList of the pokemon #
+    scrollable_frame = ctk.CTkScrollableFrame(Info, orientation="horizontal", bg_color='white', height=50)
+    scrollable_frame.grid(row=3, column=1, rowspan=5)
+
+    MoveLabel = ctk.CTkLabel(scrollable_frame, text="", font=('ariel', 15, 'bold'))
+    MoveLabel.grid(row=3, column=1)
+
+    MoveLabelFirst = ctk.CTkLabel(Info, text="Moveset:")
+    MoveLabelFirst.grid(row=3, column=0, pady=20)
+
+
+def CheckIfOnline():
+    Input = SelectBox.get()
+    if Input.strip() != "":
+        url = "https://pokeapi.co/api/v2/pokemon/" + Input
+        url = url.strip()
+        url_response = requests.get(url)
+        if url_response.status_code == 200:
+            JsonFile = url_response.json()
+
+            PokemonName = JsonFile['name']
+            AccNameLabel.configure(text=PokemonName)
+
+            PokemonSprite = JsonFile['sprites']['front_default']
+            PokemonSprite = requests.get(PokemonSprite)
+            image_data = Image.open(io.BytesIO(PokemonSprite.content))
+            poke_image = ctk.CTkImage(light_image=image_data, size=(100, 100))
+            PokeActualImage.configure(image=poke_image)
+
+            Moves = JsonFile['moves']
+            for move in Moves:
+                move_name = move['move']['name'] 
+                Movelist.append(f"'{move_name}'")
+            MoveLabel.configure(text=Movelist)
+            MoveLabel.update()
+        else:
+            SelectBox.delete(0, tk.END)
+    else:
+        print("NO!")
 
 
 # Login Window #
 Login = ctk.CTk()
-Login.resizable(0, 0) # NO MAXIMISING #
+Login.resizable(0, 0) # NO MAXIMISING it breaks my app :3 #
 
 # Bg colors #
 frame_left = ctk.CTkFrame(Login, fg_color="red")
@@ -257,6 +340,10 @@ NewLoginButton = ctk.CTkButton(Login, text="New Login", fg_color='red', text_col
 # Entry Boxes #
 UsernameEntry = ctk.CTkEntry(Login, bg_color='white')
 PasswordEntry = ctk.CTkEntry(Login, bg_color='white')
+
+# PokeDictionary #
+Guest = ctk.CTkButton(Login, text="Guest Account", command=MoreInfoPls, fg_color='red', text_color="white", bg_color='white', font=('ariel', 15, 'bold'))
+Guest.grid(row=4, column=1)
 
 # Grid the modules #
 UsernameLabel.grid(row=0, column=0)
@@ -293,10 +380,13 @@ if LoginSuccess is True:
     frame_right = ctk.CTkFrame(Main, fg_color="red")
     frame_right.grid(row=0, column=2, sticky="nsew", rowspan=10)
 
+    # frame_farRight = ctk.CTkFrame(Main, fg_color="white")
+    # frame_farRight.grid(row=0, column=3, sticky="nsew", rowspan=10)
+
     # Lower to background #
     frame_left.lower()
     frame_middle.lower()
-    frame_right.lower()
+    # frame_right.lower()
     
     # Welcome Label #
     Welcome = ctk.CTkLabel(Main, text=f"Welcome", font=('arial', 45))
@@ -362,6 +452,16 @@ if LoginSuccess is True:
 
     button6 = ctk.CTkButton(Main, command=button6, text=f"Pokemon 6", fg_color='white', text_color='red', font=('ariel', 15, 'bold'), bg_color='red')
     button6.grid(row=7, column=2, padx=100, pady=20)
+
+    OldImage = Image.open("pokedex2.png")
+    scale = 0.5
+    NewImage = new_size = (OldImage.width * scale, OldImage.height * scale)
+    poke_image = ctk.CTkImage(light_image=OldImage, size=NewImage)
+    PokeDictionary = ctk.CTkButton(Main, image=poke_image, text="", fg_color='white', bg_color='white', hover_color='grey', command=MoreInfoPls)
+    PokeDictionary.grid(column=1, row=8)
+
+    ShowThatItsAButtonSinceItsNotObvious = ctk.CTkLabel(Main, text='<-- Press here to see more data about a pokemon', font=('ariel', 20, 'bold'), bg_color='red', text_color='white')
+    ShowThatItsAButtonSinceItsNotObvious.grid(column=2, row=8)
 
     # Tutorial #
     TutorialLabel = ctk.CTkLabel(Main, text='Select a pokemon To Replace', font=('ariel', 20, 'bold'), text_color='white', bg_color='red')
