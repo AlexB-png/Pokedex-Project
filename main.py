@@ -10,12 +10,17 @@ import io
 LoginSuccess = False
 NewloginVariable = False
 IWantMoreInfoNOW = False
+fail = False
 
 Movelist = []
 
 
+def close_window(event):
+    Login.quit()  # This will close the window
+
+
 def button1():
-    global fail, selection
+    global fail
     print('pokemon 1 replaced')
     PokeInput()
     if fail is False:
@@ -25,11 +30,11 @@ def button1():
         print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke1Label.configure(text=PokemonName, text_color='pink')
+        Poke1Label.configure(text=Selection, text_color='red')
 
 
 def button2():
-    global fail, selection
+    global fail
     print('pokemon 2 replaced')
     PokeInput()
     if fail is False:
@@ -39,11 +44,11 @@ def button2():
         print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke2Label.configure(text=PokemonName, text_color='pink')
+        Poke2Label.configure(text=Selection, text_color='red')
 
 
 def button3():
-    global fail, selection
+    global fail
     print('pokemon 3 replaced')
     PokeInput()
     if fail is False:
@@ -53,11 +58,11 @@ def button3():
         print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke3Label.configure(text=PokemonName, text_color='pink')
+        Poke3Label.configure(text=Selection, text_color='red')
 
 
 def button4():
-    global fail, selection
+    global fail
     print('pokemon 4 replaced')
     PokeInput()
     if fail is False:
@@ -67,11 +72,11 @@ def button4():
         print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke4Label.configure(text=PokemonName, text_color='pink')
+        Poke4Label.configure(text=Selection, text_color='red')
 
 
 def button5():
-    global fail, selection
+    global fail
     print('pokemon 5 replaced')
     PokeInput()
     if fail is False:
@@ -81,11 +86,11 @@ def button5():
         print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke5Label.configure(text=PokemonName, text_color='pink')
+        Poke5Label.configure(text=Selection, text_color='red')
 
 
 def button6():
-    global fail, selection
+    global fail
     print('pokemon 6 replaced')
     PokeInput()
     if fail is False:
@@ -95,7 +100,7 @@ def button6():
         print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke6Label.configure(text=PokemonName, text_color='pink')
+        Poke6Label.configure(text=Selection, text_color='red')
 
 
 def LoginButton():
@@ -285,6 +290,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
 
 
 def CheckIfOnline():
+    global PokemonName
     Input = SelectBox.get()
     if Input.strip() != "":
         url = "https://pokeapi.co/api/v2/pokemon/" + Input
@@ -316,6 +322,10 @@ def CheckIfOnline():
 
 # Login Window #
 Login = ctk.CTk()
+Login.overrideredirect(True)
+Login.attributes('-topmost', True)
+
+Login.bind("<Escape>", close_window)
 Login.resizable(0, 0) # NO MAXIMISING it breaks my app :3 #
 
 # Bg colors #
