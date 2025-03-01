@@ -15,92 +15,136 @@ fail = False
 Movelist = []
 
 
-def close_window(event):
-    Login.quit()  # This will close the window
-
-
 def button1():
     global fail
-    print('pokemon 1 replaced')
     PokeInput()
     if fail is False:
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke1'] = Selection
-        print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
-        Poke1Label.configure(text=Selection, text_color='red')
+        
+        poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
+        poke_image_data = Image.open(io.BytesIO(image_response.content))
+        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+        listofvalues[0].configure(image=poke_image)
+        Poke1Label.configure(text = Selection)
 
 
 def button2():
     global fail
-    print('pokemon 2 replaced')
     PokeInput()
     if fail is False:
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke2'] = Selection
-        print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke2Label.configure(text=Selection, text_color='red')
 
+        poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
+        poke_image_data = Image.open(io.BytesIO(image_response.content))
+        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+        listofvalues[1].configure(image=poke_image)
+
 
 def button3():
     global fail
-    print('pokemon 3 replaced')
     PokeInput()
     if fail is False:
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke3'] = Selection
-        print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke3Label.configure(text=Selection, text_color='red')
 
+        poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
+        poke_image_data = Image.open(io.BytesIO(image_response.content))
+        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+        listofvalues[2].configure(image=poke_image)
+
 
 def button4():
     global fail
-    print('pokemon 4 replaced')
     PokeInput()
     if fail is False:
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke4'] = Selection
-        print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke4Label.configure(text=Selection, text_color='red')
 
+        poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
+        poke_image_data = Image.open(io.BytesIO(image_response.content))
+        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+        listofvalues[3].configure(image=poke_image)
+
 
 def button5():
     global fail
-    print('pokemon 5 replaced')
     PokeInput()
     if fail is False:
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke5'] = Selection
-        print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke5Label.configure(text=Selection, text_color='red')
 
+        poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
+        poke_image_data = Image.open(io.BytesIO(image_response.content))
+        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+        listofvalues[4].configure(image=poke_image)
+
 
 def button6():
     global fail
-    print('pokemon 6 replaced')
     PokeInput()
     if fail is False:
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke6'] = Selection
-        print(data)
         with open('passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke6Label.configure(text=Selection, text_color='red')
+
+        poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
+        poke_image_data = Image.open(io.BytesIO(image_response.content))
+        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+        listofvalues[5].configure(image=poke_image)
 
 
 def LoginButton():
@@ -115,9 +159,8 @@ def LoginButton():
         Username2 = data.loc[data['username'] == Username]
         Password2 = Username2.loc[data['password'] == Password]
     if Password2.empty is True:
-        print("Fail")
+        print('Failure')
     else:
-        print("Success")
         LoginSuccess = True
         Login.destroy()
 
@@ -125,21 +168,19 @@ def LoginButton():
 def EnterNewData():
     NewUsername = UsernameNewEntry.get().strip()
     NewUsername = NewUsername.lower().strip()
-    print(NewUsername)
     NewPassword = PasswordNewEntry.get()
     if NewPassword != "":
         NewPassword = hashlib.sha256(NewPassword.encode('utf-8')).hexdigest()
-    print(NewPassword)
     PasswordNewEntry.delete(0, tk.END)
     UsernameNewEntry.delete(0, tk.END)
 
     d = {'username': [NewUsername], 'password': [NewPassword],
-         'poke1': [pd.NA],
-         'poke2': [pd.NA],
-         'poke3': [pd.NA],
-         'poke4': [pd.NA],
-         'poke5': [pd.NA],
-         'poke6': [pd.NA]
+         'poke1': ['pikachu'],
+         'poke2': ['mew'],
+         'poke3': ['mewtwo'],
+         'poke4': ['charmander'],
+         'poke5': ['charizard'],
+         'poke6': ['eevee']
          }
     
     data = pd.DataFrame(data=d)
@@ -148,9 +189,7 @@ def EnterNewData():
         LoadedData = pd.read_csv(file)
         df = pd.concat([LoadedData, data], ignore_index=True)
         UserNameExists = LoadedData.loc[LoadedData['username'] == NewUsername]
-        print(UserNameExists)
         if UserNameExists.empty is True and NewUsername != "" and NewPassword != "":
-            print('The DataFrame Is Empty')
             df.to_csv('passwords.csv', index=False)
             StatusNewLogin.configure(text="Success!", text_color='green', font=('ariel', 25, 'bold'))
             StatusNewLogin.update()
@@ -213,7 +252,7 @@ def PokeInput():
     Selection = PokeInputText.get('1.0', tk.END)
     PokeInputText.delete('1.0', tk.END)
     if Selection.strip() == "":
-        print("Input a pokemon")
+        print('Failure')
     else:
         url = "https://pokeapi.co/api/v2/pokemon/" + Selection
         url = url.strip()
@@ -224,10 +263,8 @@ def PokeInput():
             time.sleep(3)
             TutorialLabel.configure(text='Pick A Pokemon To Replace', text_color='white', font=('ariel', 20, 'bold'))
             TutorialLabel.update()
-            print(url)
             fail = True
         else:
-            print("Success")
             fail = False
 
 
@@ -317,15 +354,71 @@ def CheckIfOnline():
         else:
             SelectBox.delete(0, tk.END)
     else:
-        print("NO!")
+        print("Fail")
+
+
+def MenuPoke():
+    try:
+        for i in range(0, 6):
+            poke_url = "https://pokeapi.co/api/v2/pokemon/" + (listofvalues[i]).strip()
+            poke_url_response = requests.get(poke_url)
+            poke_url_response.raise_for_status()
+            JsonFile = poke_url_response.json()
+            image_url = JsonFile['sprites']['front_default']
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+
+            listofvalues[i] = ctk.CTkLabel(Main, image=poke_image, text="")
+            listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
+    except AttributeError:
+        print('Not every slot is full, fill them for images!')
+
+
+def NoButton():
+    DeleteWindow.destroy()
+
+
+def YesButton():
+    # Read the CSV file into a DataFrame
+    data = pd.read_csv('passwords.csv')
+
+    # Remove the row where the 'username' matches the current username
+    data = data[data['username'] != Username]
+    
+    # Save the updated DataFrame back to the CSV file
+    data.to_csv('passwords.csv', index=False)
+
+    # Print confirmation and the updated DataFrame
+    print("Account deleted.")
+    print(data)
+
+
+def DELETEACCOUNT():
+    global DeleteWindow
+    DeleteWindow = ctk.CTkToplevel()
+    DeleteWindow.resizable(0, 0)
+    DeleteWindow.attributes("-topmost", True)
+    
+    # Are you suree? #
+
+    Frame = ctk.CTkFrame(DeleteWindow, fg_color='red')
+    Frame.grid(row=0, column=0, rowspan=10)
+    Frame.lower()
+
+    Label = ctk.CTkLabel(Frame, text=f'Are you sure you want to delete your account {Username}?')
+    Label.pack()
+
+    Yes = ctk.CTkButton(Frame, text='Yes', text_color='red', fg_color='Lime', command=YesButton)
+    No = ctk.CTkButton(Frame, text='No', text_color='white', fg_color='orange', command=NoButton)
+    Yes.pack(pady=20)
+    No.pack(pady=20)
 
 
 # Login Window #
 Login = ctk.CTk()
-Login.overrideredirect(True)
 Login.attributes('-topmost', True)
-
-Login.bind("<Escape>", close_window)
 Login.resizable(0, 0) # NO MAXIMISING it breaks my app :3 #
 
 # Bg colors #
@@ -368,16 +461,14 @@ NewLoginButton.grid(row=3, column=1, pady=20)
 Login.mainloop()
 
 
-
 if LoginSuccess is True:
+    global listofvalues
     Main = ctk.CTk()
     Main.resizable(0, 0)
 
-    Main.rowconfigure(0, weight=0)
-    Main.rowconfigure(1, weight=0)
-    Main.rowconfigure(2, weight=0)
-    Main.rowconfigure(3, weight=0)
-    for i in range(1,5):
+    for i in range(1, 4):
+        Main.rowconfigure(i)
+    for i in range(1, 3):
         Main.columnconfigure(i, weight=1)
 
     # bg colors #
@@ -389,6 +480,9 @@ if LoginSuccess is True:
 
     frame_right = ctk.CTkFrame(Main, fg_color="red")
     frame_right.grid(row=0, column=2, sticky="nsew", rowspan=10)
+
+    frame_far_right = ctk.CTkFrame(Main, fg_color="white")
+    frame_far_right.grid(row=0, column=3, sticky="nsew", rowspan=10)
 
     # frame_farRight = ctk.CTkFrame(Main, fg_color="white")
     # frame_farRight.grid(row=0, column=3, sticky="nsew", rowspan=10)
@@ -412,10 +506,9 @@ if LoginSuccess is True:
 
     # Labels for pokemon #
     PokeLabelArray = ['Label1', 'Label2', 'Label3', 'Label4', 'Label5', 'Label6']
-    for i in PokeLabelArray:
-        for x in range(1, 7):
-            i = ctk.CTkLabel(Main, text=f"Pokemon {x}:", bg_color='red', text_color='white', font=('ariel',25,'bold'))
-            i.grid(row=x+1, column=0)
+    for x in range(1, 7):
+        i = ctk.CTkLabel(Main, text=f"Pokemon {x}:", bg_color='red', text_color='white', font=('ariel',25,'bold'))
+        i.grid(row=x+1, column=0)
 
     rowselect = 2
     
@@ -442,9 +535,13 @@ if LoginSuccess is True:
     Poke5Label.grid(column=1, row=6)
     
     value6 = value['poke6'].iloc[0]
-    Poke6Label = ctk.CTkLabel(Main, text=str(value5).strip(), bg_color='white', font=('ariel', 30, 'bold'), text_color='red')
+    Poke6Label = ctk.CTkLabel(Main, text=str(value6).strip(), bg_color='white', font=('ariel', 30, 'bold'), text_color='red')
     Poke6Label.grid(column=1, row=7)
-        
+
+    listofvalues = [value1, value2, value3, value4, value5, value6]
+    
+    MenuPoke()
+    
     button1 = ctk.CTkButton(Main, command=button1, text=f"Pokemon 1", fg_color='white', text_color='red', font=('ariel', 15, 'bold'), bg_color='red')
     button1.grid(row=2, column=2, padx=100, pady=20)
 
@@ -470,11 +567,14 @@ if LoginSuccess is True:
     PokeDictionary = ctk.CTkButton(Main, image=poke_image, text="", fg_color='white', bg_color='white', hover_color='grey', command=MoreInfoPls)
     PokeDictionary.grid(column=1, row=8)
 
-    ShowThatItsAButtonSinceItsNotObvious = ctk.CTkLabel(Main, text='<-- Press here to see more data about a pokemon', font=('ariel', 20, 'bold'), bg_color='red', text_color='white')
+    ShowThatItsAButtonSinceItsNotObvious = ctk.CTkLabel(Main, text='<-- Press here to see more data about a pokemon', font=('ariel', 19, 'bold'), bg_color='red', text_color='white')
     ShowThatItsAButtonSinceItsNotObvious.grid(column=2, row=8)
 
     # Tutorial #
     TutorialLabel = ctk.CTkLabel(Main, text='Select a pokemon To Replace', font=('ariel', 20, 'bold'), text_color='white', bg_color='red')
     TutorialLabel.grid(row=1, column=2)
+
+    DeleteButton = ctk.CTkButton(Main, text='DELETE ACCOUNT', bg_color='red', fg_color='white', font=('arial', 20, 'bold'), text_color='red', command=DELETEACCOUNT)
+    DeleteButton.grid(row=8, column=0, pady=20)
 
     Main.mainloop()
