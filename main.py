@@ -393,6 +393,7 @@ def YesButton():
     # Print confirmation and the updated DataFrame
     print("Account deleted.")
     print(data)
+    Main.destroy()
 
 
 def DELETEACCOUNT():
