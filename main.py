@@ -7,6 +7,7 @@ import time
 from PIL import Image
 from PIL import UnidentifiedImageError
 import io
+from os import system
 
 # Hello :D #
 
@@ -223,9 +224,13 @@ def LoginButton():
         Username2 = data.loc[data['username'] == Username]
         Password2 = Username2.loc[data['password'] == Password]
     if Password2.empty is True:
-        print('Failure')
+        StatusLogin.configure(text='Incorrect username or password',
+                              font=('arial', 12.5, 'bold'))
     else:
+        StatusLogin.configure(text='Welcome!')
+        StatusLogin.update()
         LoginSuccess = True
+        time.sleep(2)
         Login.destroy()
 
 
@@ -233,13 +238,14 @@ def EnterNewData():
     NewUsername = UsernameNewEntry.get().strip()
     NewUsername = NewUsername.lower().strip()
     NewPassword = PasswordNewEntry.get()
+    PassCheckLen = NewPassword
     if NewPassword != "":
         NewPassword = hashlib.sha256(NewPassword.encode('utf-8')).hexdigest()
     PasswordNewEntry.delete(0, tk.END)
     UsernameNewEntry.delete(0, tk.END)
 
     d = {'username': [NewUsername], 'password': [NewPassword],
-         'poke1': ['pikachu'],
+         'poke1': ['meowstic-male'],
          'poke2': ['mew'],
          'poke3': ['mewtwo'],
          'poke4': ['charmander'],
@@ -254,12 +260,16 @@ def EnterNewData():
         df = pd.concat([LoadedData, data], ignore_index=True)
         UserNameExists = LoadedData.loc[LoadedData['username'] == NewUsername]
         if UserNameExists.empty and NewUsername and NewPassword:
-            df.to_csv('passwords.csv', index=False)
-            StatusNewLogin.configure(text="Success!",
-                                     text_color='green',
-                                     font=('ariel', 25, 'bold'))
-            StatusNewLogin.update()
-            time.sleep(3)
+            if len(PassCheckLen) < 8:
+                StatusNewLogin.configure(text="Password should have 8+ characters")
+            else:
+                df.to_csv('passwords.csv', index=False)
+                StatusNewLogin.configure(text="Success!",
+                                        text_color='green',
+                                        font=('ariel', 25, 'bold'))
+                StatusNewLogin.update()
+                time.sleep(3)
+                NewLogin.destroy()
         elif NewUsername != "" and NewPassword != "":
             StatusNewLogin.configure(text="Username in use!",
                                      text_color='green',
@@ -365,7 +375,6 @@ def PokeInput():
             else:
                 fail = False
         except KeyError:
-            print('ERROR')
             fail = True
 
 
@@ -414,14 +423,22 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     # Pre Labels ( Before updates) #
 
     # Image of selection #
-    PokeLabelImage = ctk.CTkLabel(Info, text='Pokemon Image:')
+    PokeLabelImage = ctk.CTkLabel(Info,
+                                  text='Pokemon Image:',
+                                  font=('arial', 20, 'bold'),
+                                  bg_color='red')
     PokeLabelImage.grid(row=1, column=0, pady=30)
 
-    PokeActualImage = ctk.CTkLabel(Info, text="IMAGE HERE")
+    PokeActualImage = ctk.CTkLabel(Info,
+                                   text="IMAGE HERE",
+                                   font=('arial', 20, 'bold'))
     PokeActualImage.grid(row=1, column=1)
 
     # Name of Selection #
-    PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon")
+    PokeNameLabel = ctk.CTkLabel(Info,
+                                 text="Name Of pokemon",
+                                 bg_color='red',
+                                 font=('arial', 20, 'bold'))
     PokeNameLabel.grid(row=2, column=0, pady=20)
     AccNameLabel = ctk.CTkLabel(Info, text='')
     AccNameLabel.grid(row=2, column=1)
@@ -438,7 +455,9 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     MoveLabel.grid(row=3, column=1)
 
     MoveLabelFirst = ctk.CTkLabel(Info,
-                                  text="Moveset:")
+                                  text="Moveset:",
+                                  font=('arial', 20, 'bold'),
+                                  bg_color='red')
     MoveLabelFirst.grid(row=3, column=0, pady=20)
 
 
@@ -618,13 +637,23 @@ frame_left.lower()
 frame_right.lower()
 
 # Labels #
-UsernameLabel = ctk.CTkLabel(Login, text="Username:", bg_color='red',
+UsernameLabel = ctk.CTkLabel(Login,
+                             text="Username:",
+                             bg_color='red',
                              text_color='white',
                              font=('ariel', 20, 'bold'))
 
-PasswordLabel = ctk.CTkLabel(Login, text="Password:", bg_color='red',
+PasswordLabel = ctk.CTkLabel(Login,
+                             text="Password:",
+                             bg_color='red',
                              text_color='white',
                              font=('ariel', 20, 'bold'))
+
+StatusLogin = ctk.CTkLabel(Login,
+                           text='',
+                           bg_color='red',
+                           text_color='white',
+                           font=('arial', 20, 'bold'))
 
 # Input Button #
 EnterButton = ctk.CTkButton(Login,
@@ -663,6 +692,8 @@ PasswordEntry.grid(row=1, column=1)
 
 EnterButton.grid(row=2, column=1)
 NewLoginButton.grid(row=3, column=1, pady=20)
+
+StatusLogin.grid(row=3, column=0, pady=20)
 
 Login.mainloop()
 
@@ -738,7 +769,7 @@ if LoginSuccess is True:
                       'Label6']
     for x in range(1, 7):
         i = ctk.CTkLabel(Main,
-                         text="Pokemon {x}:", bg_color='red',
+                         text=f"Pokemon {x}:", bg_color='red',
                          text_color='white',
                          font=('ariel', 25, 'bold'))
         i.grid(row=x+1, column=0)
