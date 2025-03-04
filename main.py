@@ -5,7 +5,10 @@ import pandas as pd
 import requests
 import time
 from PIL import Image
+from PIL import UnidentifiedImageError
 import io
+
+# Hello :D #
 
 LoginSuccess = False
 NewloginVariable = False
@@ -29,12 +32,14 @@ def button1():
         try:
             image_response = requests.get(image_url)
             poke_image_data = Image.open(io.BytesIO(image_response.content))
-            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            poke_image = ctk.CTkImage(light_image=poke_image_data,
+                                        size=(100, 100))
             listofvalues[0].configure(image=poke_image)
-        except:
+        except UnidentifiedImageError:
             print('678 error')
             ErrorImage = Image.open('amalgamate.png')
-            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            poke_image = ctk.CTkImage(light_image=ErrorImage,
+                                      size=(100, 100))
             listofvalues[0].configure(image=poke_image)
         Poke1Label.configure(text=name)
 
@@ -357,13 +362,22 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
         Info.rowconfigure(i)
 
     # Modules #
-    SelectLabel = ctk.CTkLabel(Info, text='Input Pokemon Here!', font=('arial', 20, 'bold'))
-    SelectLabel.grid(row=0, column=0)
+    SelectLabel = ctk.CTkLabel(Info,text='Input Pokemon Here!',
+                               font=('arial', 20, 'bold'),
+                               bg_color='red',
+                               text_color='white')
+    
+    SelectLabel.grid(row=0, column=0, pady=10)
 
     SelectBox = ctk.CTkEntry(Info, width=200, height=5)
     SelectBox.grid(row=0, column=1, padx=20)
 
-    SelectButton = ctk.CTkButton(Info, text='Input!', command=Dictionary)
+    SelectButton = ctk.CTkButton(Info, text='Input!',
+                                 command=Dictionary,
+                                 bg_color='red',
+                                 fg_color='white',
+                                 text_color='red')
+    
     SelectButton.grid(row=0, column=2)
 
     # Pre Labels ( Before updates) #
