@@ -19,132 +19,173 @@ def button1():
     global fail
     PokeInput()
     if fail is False:
-        with open('passwords.csv', 'r') as file:
-            data = pd.read_csv(file)
-        data.loc[data['username'] == Username, 'poke1'] = Selection
-        with open('passwords.csv', 'w') as file:
-            data.to_csv(file, index=False)
-        
+        print(fail)
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
         image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-        poke_image_data = Image.open(io.BytesIO(image_response.content))
-        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-        listofvalues[0].configure(image=poke_image)
-        Poke1Label.configure(text = Selection)
+        name = JsonFile['name']
+        try:
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[0].configure(image=poke_image)
+        except:
+            print('678 error')
+        Poke1Label.configure(text=name)
+
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke1'] = name
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
 
 
 def button2():
     global fail
     PokeInput()
     if fail is False:
-        with open('passwords.csv', 'r') as file:
-            data = pd.read_csv(file)
-        data.loc[data['username'] == Username, 'poke2'] = Selection
-        with open('passwords.csv', 'w') as file:
-            data.to_csv(file, index=False)
-        Poke2Label.configure(text=Selection, text_color='red')
+        
 
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
         image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-        poke_image_data = Image.open(io.BytesIO(image_response.content))
-        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-        listofvalues[1].configure(image=poke_image)
+        name = JsonFile['name']
+        
+        try:
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[1].configure(image=poke_image)
+        except:
+            print('678 error')
+        
+        Poke2Label.configure(text=name)
+
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke2'] = name
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
+        Poke2Label.configure(text=name, text_color='red')
 
 
 def button3():
     global fail
     PokeInput()
     if fail is False:
-        with open('passwords.csv', 'r') as file:
-            data = pd.read_csv(file)
-        data.loc[data['username'] == Username, 'poke3'] = Selection
-        with open('passwords.csv', 'w') as file:
-            data.to_csv(file, index=False)
-        Poke3Label.configure(text=Selection, text_color='red')
+        
 
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
         image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-        poke_image_data = Image.open(io.BytesIO(image_response.content))
-        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-        listofvalues[2].configure(image=poke_image)
+        name = JsonFile['name']
+        
+        try:
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[2].configure(image=poke_image)
+        except:
+            print('678 error')
+
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke3'] = name
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
+        Poke3Label.configure(text=name, text_color='red')
 
 
 def button4():
     global fail
     PokeInput()
     if fail is False:
-        with open('passwords.csv', 'r') as file:
-            data = pd.read_csv(file)
-        data.loc[data['username'] == Username, 'poke4'] = Selection
-        with open('passwords.csv', 'w') as file:
-            data.to_csv(file, index=False)
-        Poke4Label.configure(text=Selection, text_color='red')
+        
 
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
         image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-        poke_image_data = Image.open(io.BytesIO(image_response.content))
-        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-        listofvalues[3].configure(image=poke_image)
+        name = JsonFile['name']
+        try:
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[3].configure(image=poke_image)
+        except:
+            print('678 error')
+
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke4'] = name
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
+        Poke4Label.configure(text=name, text_color='red')
 
 
 def button5():
     global fail
     PokeInput()
     if fail is False:
-        with open('passwords.csv', 'r') as file:
-            data = pd.read_csv(file)
-        data.loc[data['username'] == Username, 'poke5'] = Selection
-        with open('passwords.csv', 'w') as file:
-            data.to_csv(file, index=False)
-        Poke5Label.configure(text=Selection, text_color='red')
+        
 
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
         image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-        poke_image_data = Image.open(io.BytesIO(image_response.content))
-        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-        listofvalues[4].configure(image=poke_image)
+        name = JsonFile['name']
+        
+        try:
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[4].configure(image=poke_image)
+        except:
+            print('678 error')
+
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke5'] = name
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
+        Poke5Label.configure(text=name, text_color='red')
 
 
 def button6():
     global fail
     PokeInput()
     if fail is False:
-        with open('passwords.csv', 'r') as file:
-            data = pd.read_csv(file)
-        data.loc[data['username'] == Username, 'poke6'] = Selection
-        with open('passwords.csv', 'w') as file:
-            data.to_csv(file, index=False)
-        Poke6Label.configure(text=Selection, text_color='red')
+        
 
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
         image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-        poke_image_data = Image.open(io.BytesIO(image_response.content))
-        poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-        listofvalues[5].configure(image=poke_image)
+        name = JsonFile['name']
+        
+        try:
+            image_response = requests.get(image_url)
+            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[5].configure(image=poke_image)
+        except:
+            print('678 error')
+
+        with open('passwords.csv', 'r') as file:
+            data = pd.read_csv(file)
+        data.loc[data['username'] == Username, 'poke6'] = name
+        with open('passwords.csv', 'w') as file:
+            data.to_csv(file, index=False)
+        Poke6Label.configure(text=name, text_color='red')
 
 
 def LoginButton():
@@ -253,19 +294,25 @@ def PokeInput():
     PokeInputText.delete('1.0', tk.END)
     if Selection.strip() == "":
         print('Failure')
+        fail = True
     else:
-        url = "https://pokeapi.co/api/v2/pokemon/" + Selection
-        url = url.strip()
-        url_response = requests.get(url)
-        if url_response.status_code != 200:
-            TutorialLabel.configure(text='Invalid Pokemon', text_color='purple', font=('ariel', 30, 'bold'))
-            TutorialLabel.update()
-            time.sleep(3)
-            TutorialLabel.configure(text='Pick A Pokemon To Replace', text_color='white', font=('ariel', 20, 'bold'))
-            TutorialLabel.update()
+        print(Selection)
+        try:
+            url = "https://pokeapi.co/api/v2/pokemon/" + Selection
+            url = url.strip()
+            url_response = requests.get(url)
+            if url_response.status_code != 200:
+                TutorialLabel.configure(text='Invalid Pokemon', text_color='purple', font=('ariel', 30, 'bold'))
+                TutorialLabel.update()
+                time.sleep(3)
+                TutorialLabel.configure(text='Pick A Pokemon To Replace', text_color='white', font=('ariel', 20, 'bold'))
+                TutorialLabel.update()
+                fail = True
+            else:
+                fail = False
+        except KeyError:
+            print('ERROR')
             fail = True
-        else:
-            fail = False
 
 
 def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
@@ -341,9 +388,6 @@ def CheckIfOnline():
 
             PokemonSprite = JsonFile['sprites']['front_default']
             PokemonSprite = requests.get(PokemonSprite)
-            image_data = Image.open(io.BytesIO(PokemonSprite.content))
-            poke_image = ctk.CTkImage(light_image=image_data, size=(100, 100))
-            PokeActualImage.configure(image=poke_image)
 
             Moves = JsonFile['moves']
             for move in Moves:
@@ -366,12 +410,15 @@ def MenuPoke():
             JsonFile = poke_url_response.json()
             image_url = JsonFile['sprites']['front_default']
             image_response = requests.get(image_url)
-            poke_image_data = Image.open(io.BytesIO(image_response.content))
+            
 
-            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-
-            listofvalues[i] = ctk.CTkLabel(Main, image=poke_image, text="")
-            listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
+            try:
+                poke_image_data = Image.open(io.BytesIO(image_response.content))
+                poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+                listofvalues[i] = ctk.CTkLabel(Main, image=poke_image, text="")
+                listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
+            except:
+                print('678 error')
     except AttributeError:
         print('Not every slot is full, fill them for images!')
 
@@ -564,9 +611,12 @@ if LoginSuccess is True:
     OldImage = Image.open("pokedex2.png")
     scale = 0.5
     NewImage = new_size = (OldImage.width * scale, OldImage.height * scale)
-    poke_image = ctk.CTkImage(light_image=OldImage, size=NewImage)
-    PokeDictionary = ctk.CTkButton(Main, image=poke_image, text="", fg_color='white', bg_color='white', hover_color='grey', command=MoreInfoPls)
-    PokeDictionary.grid(column=1, row=8)
+    try:
+        poke_image = ctk.CTkImage(light_image=OldImage, size=NewImage)
+        PokeDictionary = ctk.CTkButton(Main, image=poke_image, text="", fg_color='white', bg_color='white', hover_color='grey', command=MoreInfoPls)
+        PokeDictionary.grid(column=1, row=8)
+    except:
+        print('678 error')
 
     ShowThatItsAButtonSinceItsNotObvious = ctk.CTkLabel(Main, text='<-- Press here to see more data about a pokemon', font=('ariel', 19, 'bold'), bg_color='red', text_color='white')
     ShowThatItsAButtonSinceItsNotObvious.grid(column=2, row=8)
