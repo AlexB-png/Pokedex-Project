@@ -33,6 +33,9 @@ def button1():
             listofvalues[0].configure(image=poke_image)
         except:
             print('678 error')
+            ErrorImage = Image.open('amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            listofvalues[0].configure(image=poke_image)
         Poke1Label.configure(text=name)
 
         with open('passwords.csv', 'r') as file:
@@ -58,10 +61,13 @@ def button2():
         try:
             image_response = requests.get(image_url)
             poke_image_data = Image.open(io.BytesIO(image_response.content))
-            poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
-            listofvalues[1].configure(image=poke_image)
+            poke_image_Error = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+            listofvalues[1].configure(image=poke_image_Error)
         except:
             print('678 error')
+            ErrorImage = Image.open('amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            listofvalues[1].configure(image=poke_image)
         
         Poke2Label.configure(text=name)
 
@@ -93,6 +99,9 @@ def button3():
             listofvalues[2].configure(image=poke_image)
         except:
             print('678 error')
+            ErrorImage = Image.open('amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            listofvalues[2].configure(image=poke_image)
 
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
@@ -121,6 +130,9 @@ def button4():
             listofvalues[3].configure(image=poke_image)
         except:
             print('678 error')
+            ErrorImage = Image.open('amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            listofvalues[3].configure(image=poke_image)
 
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
@@ -150,6 +162,9 @@ def button5():
             listofvalues[4].configure(image=poke_image)
         except:
             print('678 error')
+            ErrorImage = Image.open('amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            listofvalues[4].configure(image=poke_image)
 
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
@@ -179,6 +194,9 @@ def button6():
             listofvalues[5].configure(image=poke_image)
         except:
             print('678 error')
+            ErrorImage = Image.open('amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+            listofvalues[5].configure(image=poke_image)
 
         with open('passwords.csv', 'r') as file:
             data = pd.read_csv(file)
@@ -316,7 +334,7 @@ def PokeInput():
 
 
 def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
-    global SelectBox, PokeActualImage, AccNameLabel, MoveLabel
+    global SelectBox, PokeActualImage, AccNameLabel, MoveLabel, SelectLabel
     Info = ctk.CTkToplevel()
     Info.resizable(0, 0)  # Dont even try resizing #
     Info.attributes('-topmost', True)
@@ -339,13 +357,13 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
         Info.rowconfigure(i)
 
     # Modules #
-    SelectLabel = ctk.CTkLabel(Info, text='Input Pokemon Here!')
+    SelectLabel = ctk.CTkLabel(Info, text='Input Pokemon Here!', font=('arial', 20, 'bold'))
     SelectLabel.grid(row=0, column=0)
 
     SelectBox = ctk.CTkEntry(Info, width=200, height=5)
     SelectBox.grid(row=0, column=1, padx=20)
 
-    SelectButton = ctk.CTkButton(Info, text='Input!', command=CheckIfOnline)
+    SelectButton = ctk.CTkButton(Info, text='Input!', command=Dictionary)
     SelectButton.grid(row=0, column=2)
 
     # Pre Labels ( Before updates) #
@@ -353,7 +371,8 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     # Image of selection #
     PokeLabelImage = ctk.CTkLabel(Info, text='Pokemon Image:')
     PokeLabelImage.grid(row=1, column=0, pady=30)
-    PokeActualImage = ctk.CTkLabel(Info, text="")
+    
+    PokeActualImage = ctk.CTkLabel(Info, text="IMAGE HERE")
     PokeActualImage.grid(row=1, column=1)
 
     # Name of Selection #
@@ -401,6 +420,39 @@ def CheckIfOnline():
         print("Fail")
 
 
+def Dictionary():
+    Input = SelectBox.get()
+    if Input.strip() != "":
+        url = "https://pokeapi.co/api/v2/pokemon/" + Input
+        url = url.strip()
+        url_response = requests.get(url)
+        if url_response.status_code == 200:
+            JsonFile = url_response.json()
+
+            PokemonName = JsonFile['name']
+            AccNameLabel.configure(text=PokemonName)
+
+            try:
+                PokemonSprite = JsonFile['sprites']['front_default']
+                PokemonSprite = requests.get(PokemonSprite)
+                poke_image_data = Image.open(io.BytesIO(PokemonSprite.content))
+                poke_image = ctk.CTkImage(light_image=poke_image_data, size=(100, 100))
+                PokeActualImage.configure(image=poke_image, text="")
+            except:
+                PokeActualImage.configure(text='678 error')
+
+            Moves = JsonFile['moves']
+            for move in Moves:
+                move_name = move['move']['name'] 
+                Movelist.append(f"'{move_name}'")
+            MoveLabel.configure(text=Movelist)
+            MoveLabel.update()
+        else:
+            SelectBox.delete(0, tk.END)
+    else:
+        print("Fail")
+
+
 def MenuPoke():
     try:
         for i in range(0, 6):
@@ -419,6 +471,10 @@ def MenuPoke():
                 listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
             except:
                 print('678 error')
+                ErrorImage = Image.open('amalgamate.png')
+                poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
+                listofvalues[i] = ctk.CTkLabel(Main, image=poke_image, text="")
+                listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
     except AttributeError:
         print('Not every slot is full, fill them for images!')
 
