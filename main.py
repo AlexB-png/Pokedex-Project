@@ -7,7 +7,6 @@ import time
 from PIL import Image
 from PIL import UnidentifiedImageError
 import io
-from os import system
 
 # Hello :D #
 
@@ -37,7 +36,7 @@ def button1():
                                       size=(100, 100))
             listofvalues[0].configure(image=poke_image)
         except UnidentifiedImageError:
-            print('678 error')
+
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage,
                                       size=(100, 100))
@@ -70,7 +69,7 @@ def button2():
                                             size=(100, 100))
             listofvalues[1].configure(image=poke_image_Error)
         except UnidentifiedImageError:
-            print('678 error')
+
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[1].configure(image=poke_image)
@@ -104,7 +103,7 @@ def button3():
 
             listofvalues[2].configure(image=poke_image)
         except UnidentifiedImageError:
-            print('678 error')
+
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[2].configure(image=poke_image)
@@ -136,7 +135,7 @@ def button4():
 
             listofvalues[3].configure(image=poke_image)
         except UnidentifiedImageError:
-            print('678 error')
+
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[3].configure(image=poke_image)
@@ -168,7 +167,7 @@ def button5():
                                       size=(100, 100))
             listofvalues[4].configure(image=poke_image)
         except UnidentifiedImageError:
-            print('678 error')
+
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[4].configure(image=poke_image)
@@ -199,7 +198,7 @@ def button6():
                                       size=(100, 100))
             listofvalues[5].configure(image=poke_image)
         except UnidentifiedImageError:
-            print('678 error')
+
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[5].configure(image=poke_image)
@@ -261,12 +260,13 @@ def EnterNewData():
         UserNameExists = LoadedData.loc[LoadedData['username'] == NewUsername]
         if UserNameExists.empty and NewUsername and NewPassword:
             if len(PassCheckLen) < 8:
-                StatusNewLogin.configure(text="Password should have 8+ characters")
+                text = "Password should have 8+ characters"
+                StatusNewLogin.configure(text=text)
             else:
                 df.to_csv('passwords.csv', index=False)
                 StatusNewLogin.configure(text="Success!",
-                                        text_color='green',
-                                        font=('ariel', 25, 'bold'))
+                                         text_color='green',
+                                         font=('ariel', 25, 'bold'))
                 StatusNewLogin.update()
                 time.sleep(3)
                 NewLogin.destroy()
@@ -551,7 +551,7 @@ def MenuPoke():
 
                 listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
             except UnidentifiedImageError:
-                print('678 error')
+
                 ErrorImage = Image.open('amalgamate.png')
                 poke_image = ctk.CTkImage(light_image=ErrorImage,
                                           size=(100, 100))
