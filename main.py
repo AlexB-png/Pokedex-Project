@@ -400,28 +400,37 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
 
     SelectLabel.grid(row=0, column=0, pady=10)
 
-    SelectBox = ctk.CTkEntry(Info, width=200, height=5)
+    SelectBox = ctk.CTkEntry(Info, width=200, height=5, bg_color='white')
     SelectBox.grid(row=0, column=1, padx=20)
 
     SelectButton = ctk.CTkButton(Info, text='Input!',
                                  command=Dictionary,
                                  bg_color='red',
                                  fg_color='white',
-                                 text_color='red')
+                                 text_color='red',
+                                 font=('arial', 20, 'bold'))
 
     SelectButton.grid(row=0, column=2)
 
     # Pre Labels ( Before updates) #
 
     # Image of selection #
-    PokeLabelImage = ctk.CTkLabel(Info, text='Pokemon Image:')
+    PokeLabelImage = ctk.CTkLabel(Info,
+                                  text='Pokemon Image:',
+                                  bg_color='red',
+                                  font=('arial', 20, 'bold'),
+                                  text_color='white')
     PokeLabelImage.grid(row=1, column=0, pady=30)
 
-    PokeActualImage = ctk.CTkLabel(Info, text="IMAGE HERE")
+    PokeActualImage = ctk.CTkLabel(Info,
+                                   text="IMAGE HERE",
+                                   font=('arial', 20, 'bold'),
+                                   bg_color='white',
+                                   text_color='red')
     PokeActualImage.grid(row=1, column=1)
 
     # Name of Selection #
-    PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon")
+    PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon", font=('arial', 20, 'bold'), bg_color='red', text_color='white')
     PokeNameLabel.grid(row=2, column=0, pady=20)
     AccNameLabel = ctk.CTkLabel(Info, text='')
     AccNameLabel.grid(row=2, column=1)
@@ -438,7 +447,10 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     MoveLabel.grid(row=3, column=1)
 
     MoveLabelFirst = ctk.CTkLabel(Info,
-                                  text="Moveset:")
+                                  text="Moveset:",
+                                  font=('arial', 20, 'bold'),
+                                  text_color='white',
+                                  bg_color='red')
     MoveLabelFirst.grid(row=3, column=0, pady=20)
 
 
@@ -462,8 +474,6 @@ def CheckIfOnline():
             for move in Moves:
                 move_name = move['move']['name']
                 Movelist.append(f"'{move_name}'")
-            MoveLabel.configure(text=Movelist)
-            MoveLabel.update()
         else:
             SelectBox.delete(0, tk.END)
     else:
@@ -480,7 +490,8 @@ def Dictionary():
             JsonFile = url_response.json()
 
             PokemonName = JsonFile['name']
-            AccNameLabel.configure(text=PokemonName)
+            AccNameLabel.configure(text=PokemonName, text_color='red', bg_color='white', font=('arial', 20, 'bold'))
+
 
             try:
                 PokemonSprite = JsonFile['sprites']['front_default']
