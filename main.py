@@ -749,7 +749,7 @@ if LoginSuccess is True:
                       'Label6']
     for x in range(1, 7):
         i = ctk.CTkLabel(Main,
-                         text="Pokemon {x}:", bg_color='red',
+                         text=f"Pokemon {x}:", bg_color='red',
                          text_color='white',
                          font=('ariel', 25, 'bold'))
         i.grid(row=x+1, column=0)
