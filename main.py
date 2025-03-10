@@ -285,6 +285,7 @@ def EnterNewData():
 def NewLogin():
     global StatusNewLogin, UsernameNewEntry, PasswordNewEntry, NewLogin
     NewLogin = ctk.CTkToplevel()
+    NewLogin.attributes("-topmost", True)
     NewLogin.resizable(0, 0)
 
     # Bg colors #
@@ -614,7 +615,6 @@ def DELETEACCOUNT():
 
 # Login Window #
 Login = ctk.CTk()
-Login.attributes('-topmost', True)
 Login.resizable(0, 0)  # NO MAXIMISING it breaks my app :3 #
 
 # Bg colors #
