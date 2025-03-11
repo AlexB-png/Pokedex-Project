@@ -628,10 +628,12 @@ def DELETEACCOUNT():
 
 
 def change():
+    global InputName, InputPass, ChangeWindow, Label
     # New Window #
     ChangeWindow = ctk.CTkToplevel()
     ChangeWindow.resizable(0, 0)
     ChangeWindow.attributes('-topmost', True)
+    ChangeWindow.geometry('350x300')
     
     # Make the grid expand #
     ChangeWindow.grid_rowconfigure(0, weight=1)
@@ -644,14 +646,58 @@ def change():
     frame.grid_columnconfigure(0, weight=1)
     
     # Modules #
-    Label = ctk.CTkLabel(frame, text="What would you like to change your username to?", font=('arial', 20, 'bold'))
-    Label.grid(row=0, column=0, sticky='nesw', pady=20, padx=10)
+    Label = ctk.CTkLabel(frame,
+                         text="What would you like to change your username to?", 
+                         font=('arial', 20, 'bold'),
+                         text_color='white')
+    Label.grid(row=0, column=0, sticky='nesw', pady=10, padx=10)
+
+    PassLabel = ctk.CTkLabel(frame,
+                             text='New Password!',
+                             font=('arial', 20, 'bold'),
+                             text_color='white')
+    PassLabel.grid(row=2, column=0, sticky='nesw', pady=10, padx=10)
     
     InputName = ctk.CTkEntry(frame)
-    InputName.grid(row=1, column=0, pady=20)
+    InputName.grid(row=1, column=0, pady=10)
+
+    InputPass = ctk.CTkEntry(frame)
+    InputPass.grid(row=3, column=0, pady=10)
     
-    InputButton = ctk.CTkButton(frame, text='Input!', text_color='red', bg_color='red', fg_color='white', font=('arial', 20, 'bold'))
-    InputButton.grid(row=2, column=0)
+    InputButton = ctk.CTkButton(frame,
+                                text='Input!',
+                                text_color='red',
+                                bg_color='red',
+                                fg_color='white',
+                                font=('arial', 20, 'bold'),
+                                command=replace)
+    InputButton.grid(row=5, column=0, pady=40)
+
+
+def replace():
+    InputUser = InputName.get()
+    InputPassword = InputPass.get()
+    # RData refers to replacement data #
+    RData = pd.read_csv('./data/passwords.csv')
+
+    # This checks if the Username already exists #
+    check = RData.loc[data['username'] == InputUser]
+    # This encrypts the password #
+    PassWord = hashlib.sha256(InputPassword.encode('utf-8')).hexdigest()
+
+    if check.empty:
+        # Changes Username #
+        RData.loc[RData['username'] == Username, 'username'] = InputUser
+        # Changes Password #
+        RData.loc[RData['username'] == InputUser, 'password'] = PassWord
+        RData.to_csv('./data/passwords.csv', index=False)
+
+        # Deletes the windows on success #
+        Main.destroy()
+    else:
+        Label.configure(text="Username already exists!")
+
+
 
 
 # Login Window #
