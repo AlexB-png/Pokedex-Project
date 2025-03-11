@@ -627,6 +627,33 @@ def DELETEACCOUNT():
     No.pack(pady=20)
 
 
+def change():
+    # New Window #
+    ChangeWindow = ctk.CTkToplevel()
+    ChangeWindow.resizable(0, 0)
+    ChangeWindow.attributes('-topmost', True)
+    
+    # Make the grid expand #
+    ChangeWindow.grid_rowconfigure(0, weight=1)
+    ChangeWindow.grid_columnconfigure(0, weight=1)
+    
+    # Frame #
+    frame = ctk.CTkFrame(ChangeWindow, fg_color='red')
+    frame.grid(row=0, column=0, sticky='nesw')
+    frame.grid_rowconfigure(0, weight=1)
+    frame.grid_columnconfigure(0, weight=1)
+    
+    # Modules #
+    Label = ctk.CTkLabel(frame, text="What would you like to change your username to?", font=('arial', 20, 'bold'))
+    Label.grid(row=0, column=0, sticky='nesw', pady=20, padx=10)
+    
+    InputName = ctk.CTkEntry(frame)
+    InputName.grid(row=1, column=0, pady=20)
+    
+    InputButton = ctk.CTkButton(frame, text='Input!', text_color='red', bg_color='red', fg_color='white', font=('arial', 20, 'bold'))
+    InputButton.grid(row=2, column=0)
+
+
 # Login Window #
 Login = ctk.CTk()
 Login.resizable(0, 0)  # NO MAXIMISING it breaks my app :3 #
@@ -738,6 +765,10 @@ if LoginSuccess is True:
                             text_color='lime')
 
     Welcome2.grid(row=0, column=1, sticky='ew')
+
+    # Change Login Button #
+    Change = ctk.CTkButton(Main, text="Change Name!", text_color='red', bg_color='red', fg_color='white', font=('arial', 20, 'bold'), command=change)
+    Change.grid(row=0, column=2)
 
     # Input Pokemon #
     PokeLabel = ctk.CTkLabel(Main,
