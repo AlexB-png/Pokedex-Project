@@ -7,6 +7,7 @@ import time
 from PIL import Image
 from PIL import UnidentifiedImageError
 import io
+import os
 
 # Hello :D #
 
@@ -764,6 +765,7 @@ if LoginSuccess is True:
                       'Label5',
                       'Label6']
     for x in range(1, 7):
+        # Grids all 6 labels 1-6 #
         i = ctk.CTkLabel(Main,
                          text=f"Pokemon {x}:", bg_color='red',
                          text_color='white',
@@ -774,6 +776,7 @@ if LoginSuccess is True:
 
     value = data.loc[data['username'] == Username]
 
+    # All of this just reads the pokemon name from the CSV #
     value1 = value['poke1'].iloc[0]
     Poke1Label = ctk.CTkLabel(Main,
                               text=str(value1).strip(),
@@ -828,9 +831,10 @@ if LoginSuccess is True:
     Poke6Label.grid(column=1, row=7)
 
     listofvalues = [value1, value2, value3, value4, value5, value6]
-
+    # The list of value get changed to the pokemon #
     MenuPoke()
 
+    # Packs all 6 buttons that enable replacement #
     button1 = ctk.CTkButton(Main,
                             command=button1,
                             text="Pokemon 1",
@@ -885,10 +889,10 @@ if LoginSuccess is True:
                             bg_color='red')
     button6.grid(row=7, column=2, padx=100, pady=20)
 
-    OldImage = Image.open("pokedex2.png")
-    scale = 0.5
-    NewImage = new_size = (OldImage.width * scale, OldImage.height * scale)
     try:
+        OldImage = Image.open("pokedex2.png")
+        scale = 0.5
+        NewImage = new_size = (OldImage.width * scale, OldImage.height * scale)
         poke_image = ctk.CTkImage(light_image=OldImage, size=NewImage)
         PokeDictionary = ctk.CTkButton(Main,
                                        image=poke_image,
@@ -898,9 +902,11 @@ if LoginSuccess is True:
                                        hover_color='grey',
                                        command=MoreInfoPls)
         PokeDictionary.grid(column=1, row=8)
-    except UnidentifiedImageError:
-        print('678 error')
+    except FileNotFoundError:  # image doesn't exist in files #
+        os.system('cls')
+        print('file download error')
 
+    # Makes a label for the unaware #
     TextType = '<-- Press here to see more data about a pokemon'
     FontType = ('ariel', 19, 'bold')
     ShowThatItsAButtonSinceItsNotObvious = ctk.CTkLabel(Main,
@@ -924,7 +930,7 @@ if LoginSuccess is True:
                                  fg_color='white',
                                  font=('arial', 20, 'bold'),
                                  text_color='red',
-                                 command=DELETEACCOUNT)
+                                 command=DELETEACCOUNT)  # BE CAREFUL #
     DeleteButton.grid(row=8, column=0, pady=20)
 
     Main.mainloop()
