@@ -17,30 +17,42 @@ fail = False
 
 Movelist = []
 
+# Assume all the buttons have the same comments #
+
 
 def button1():
     global fail
     PokeInput()
     if fail is False:
         print(fail)
+        # Creates the URL for the pokemon #
         poke_url = "https://pokeapi.co/api/v2/pokemon/" + Selection.strip()
+        # Uses requests to get a JSON file #
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
+        # Creates a JSON file out of the response #
         JsonFile = poke_url_response.json()
+        # Pulls values from the JSON file #
         image_url = JsonFile['sprites']['front_default']
         name = JsonFile['name']
+        # if 678 is input then the amalgamate image is shown #
         try:
+            # This takes the image from the json file #
             image_response = requests.get(image_url)
+            # Renders the image #
             poke_image_data = Image.open(io.BytesIO(image_response.content))
+            # Creates the image #
             poke_image = ctk.CTkImage(light_image=poke_image_data,
                                       size=(100, 100))
+            # Changes the label to be the image #
             listofvalues[0].configure(image=poke_image)
-        except UnidentifiedImageError:
+        except UnidentifiedImageError:  # 678 error #
             print('678 error')
             ErrorImage = Image.open('amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage,
                                       size=(100, 100))
             listofvalues[0].configure(image=poke_image)
+        # Changes the name label to the selected pokemons name #
         Poke1Label.configure(text=name)
 
         with open('passwords.csv', 'r') as file:
@@ -211,13 +223,22 @@ def button6():
         Poke6Label.configure(text=name, text_color='red')
 
 
+# End of button functions #
+
+
 def LoginButton():
     global Username, Password, LoginSuccess, data
+    # Grabs the input from the input box #
     Username = UsernameEntry.get()
+    # Clears the username input #
     UsernameEntry.delete(0, tk.END)
+    # Grabs the password entry #
     Password = PasswordEntry.get()
+    # Clears the password entry #
     PasswordEntry.delete(0, tk.END)
+    # Encrypts the password to check in csv #
     Password = hashlib.sha256(Password.encode('utf-8')).hexdigest()
+    # Checks and loads the CSV #
     with open('passwords.csv', 'r') as data:
         data = pd.read_csv(data)
         Username2 = data.loc[data['username'] == Username]
@@ -238,11 +259,12 @@ def EnterNewData():
     PasswordNewEntry.delete(0, tk.END)
     UsernameNewEntry.delete(0, tk.END)
 
+    # Professor Oak has made a donation! ( Its to show features of my code ) #
     d = {'username': [NewUsername], 'password': [NewPassword],
          'poke1': ['pikachu'],
          'poke2': ['mew'],
          'poke3': ['mewtwo'],
-         'poke4': ['charmander'],
+         'poke4': ['meowstic-male'],
          'poke5': ['charizard'],
          'poke6': ['eevee']
          }
@@ -253,19 +275,23 @@ def EnterNewData():
         LoadedData = pd.read_csv(file)
         df = pd.concat([LoadedData, data], ignore_index=True)
         UserNameExists = LoadedData.loc[LoadedData['username'] == NewUsername]
+        # Checks if both inputs are empty #
         if UserNameExists.empty and NewUsername and NewPassword:
+            # Adds the new login #
             df.to_csv('passwords.csv', index=False)
             StatusNewLogin.configure(text="Success!",
                                      text_color='green',
                                      font=('ariel', 25, 'bold'))
             StatusNewLogin.update()
             time.sleep(3)
+        # If username and password has text in it #
         elif NewUsername != "" and NewPassword != "":
             StatusNewLogin.configure(text="Username in use!",
                                      text_color='green',
                                      font=('ariel', 20, 'bold'))
             StatusNewLogin.update()
         else:
+            # Code is not happy with you #
             for i in range(1, 20):
                 if i % 2 == 0:
                     SirenColor = 'red'
@@ -283,6 +309,7 @@ def EnterNewData():
 
 
 def NewLogin():
+    # This entire thing is just to make a window #
     global StatusNewLogin, UsernameNewEntry, PasswordNewEntry, NewLogin
     NewLogin = ctk.CTkToplevel()
     NewLogin.attributes("-topmost", True)
@@ -329,12 +356,15 @@ def NewLogin():
                                        fg_color='red')
 
     # Grid Modules #
+    # Labels
     UsernameNewLabel.grid(row=0, column=0, pady=20, padx=30)
     PasswordNewLabel.grid(row=1, column=0)
 
+    # Inputs #
     UsernameNewEntry.grid(row=0, column=1, pady=20)
     PasswordNewEntry.grid(row=1, column=1)
 
+    # Buttons #
     EnterNewDataButton.grid(row=2, column=1, pady=20)
     StatusNewLogin.grid(row=3, column=0)
 
@@ -376,6 +406,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     Info.resizable(0, 0)  # Dont even try resizing #
     Info.attributes('-topmost', True)
 
+    # Colored frames for the UI #
     frame_left = ctk.CTkFrame(Info, fg_color="red")
     frame_left.grid(row=0, column=0, sticky="nsew", rowspan=50)
 
@@ -431,7 +462,10 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     PokeActualImage.grid(row=1, column=1)
 
     # Name of Selection #
-    PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon", font=('arial', 20, 'bold'), bg_color='red', text_color='white')
+    PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon",
+                                 font=('arial', 20, 'bold'),
+                                 bg_color='red',
+                                 text_color='white')
     PokeNameLabel.grid(row=2, column=0, pady=20)
     AccNameLabel = ctk.CTkLabel(Info, text='')
     AccNameLabel.grid(row=2, column=1)
@@ -455,58 +489,40 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     MoveLabelFirst.grid(row=3, column=0, pady=20)
 
 
-def CheckIfOnline():
-    global PokemonName
-    Input = SelectBox.get()
-    if Input.strip() != "":
-        url = "https://pokeapi.co/api/v2/pokemon/" + Input
-        url = url.strip()
-        url_response = requests.get(url)
-        if url_response.status_code == 200:
-            JsonFile = url_response.json()
-
-            PokemonName = JsonFile['name']
-            AccNameLabel.configure(text=PokemonName)
-
-            PokemonSprite = JsonFile['sprites']['front_default']
-            PokemonSprite = requests.get(PokemonSprite)
-
-            Moves = JsonFile['moves']
-            for move in Moves:
-                move_name = move['move']['name']
-                Movelist.append(f"'{move_name}'")
-        else:
-            SelectBox.delete(0, tk.END)
-    else:
-        print("Fail")
-
-
 def Dictionary():
     Input = SelectBox.get()
     if Input.strip() != "":
+        # Makes the URL and gets the JSON
         url = "https://pokeapi.co/api/v2/pokemon/" + Input
         url = url.strip()
         url_response = requests.get(url)
+        # Checks if the server exists #
         if url_response.status_code == 200:
             JsonFile = url_response.json()
 
             PokemonName = JsonFile['name']
-            AccNameLabel.configure(text=PokemonName, text_color='red', bg_color='white', font=('arial', 20, 'bold'))
-
+            # Puts the name into the disctionary #
+            AccNameLabel.configure(text=PokemonName,
+                                   text_color='red',
+                                   bg_color='white',
+                                   font=('arial', 20, 'bold'))
 
             try:
+                # Renders image and puts in the dictionary #
                 PokemonSprite = JsonFile['sprites']['front_default']
                 PokemonSprite = requests.get(PokemonSprite)
                 poke_image_data = Image.open(io.BytesIO(PokemonSprite.content))
                 poke_image = ctk.CTkImage(light_image=poke_image_data,
                                           size=(100, 100))
+                # Puts the image into the label #
                 PokeActualImage.configure(image=poke_image, text="")
-            except UnidentifiedImageError:
+            except UnidentifiedImageError:  # 678 error #
                 ErrorImage = Image.open('amalgamate.png')
                 poke_image = ctk.CTkImage(light_image=ErrorImage,
                                           size=(100, 100))
                 PokeActualImage.configure(image=poke_image, text="")
 
+            # Also places the moves into a scrollable frame #
             Moves = JsonFile['moves']
             for move in Moves:
                 move_name = move['move']['name']
