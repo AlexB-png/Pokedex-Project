@@ -49,17 +49,17 @@ def button1():
             listofvalues[0].configure(image=poke_image)
         except UnidentifiedImageError:  # 678 error #
             print('678 error')
-            ErrorImage = Image.open('amalgamate.png')
+            ErrorImage = Image.open('./images/amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage,
                                       size=(100, 100))
             listofvalues[0].configure(image=poke_image)
         # Changes the name label to the selected pokemons name #
         Poke1Label.configure(text=name)
 
-        with open('passwords.csv', 'r') as file:
+        with open('./data/passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke1'] = name
-        with open('passwords.csv', 'w') as file:
+        with open('./data/passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
 
 
@@ -83,16 +83,16 @@ def button2():
             listofvalues[1].configure(image=poke_image_Error)
         except UnidentifiedImageError:
             print('678 error')
-            ErrorImage = Image.open('amalgamate.png')
+            ErrorImage = Image.open('./images/amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[1].configure(image=poke_image)
 
         Poke2Label.configure(text=name)
 
-        with open('passwords.csv', 'r') as file:
+        with open('./data/passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke2'] = name
-        with open('passwords.csv', 'w') as file:
+        with open('./data/passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke2Label.configure(text=name, text_color='red')
 
@@ -117,14 +117,14 @@ def button3():
             listofvalues[2].configure(image=poke_image)
         except UnidentifiedImageError:
             print('678 error')
-            ErrorImage = Image.open('amalgamate.png')
+            ErrorImage = Image.open('./images/amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[2].configure(image=poke_image)
 
-        with open('passwords.csv', 'r') as file:
+        with open('./data/passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke3'] = name
-        with open('passwords.csv', 'w') as file:
+        with open('./data/passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke3Label.configure(text=name, text_color='red')
 
@@ -149,14 +149,14 @@ def button4():
             listofvalues[3].configure(image=poke_image)
         except UnidentifiedImageError:
             print('678 error')
-            ErrorImage = Image.open('amalgamate.png')
+            ErrorImage = Image.open('./images/amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[3].configure(image=poke_image)
 
-        with open('passwords.csv', 'r') as file:
+        with open('./data/passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke4'] = name
-        with open('passwords.csv', 'w') as file:
+        with open('./data/passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke4Label.configure(text=name, text_color='red')
 
@@ -181,14 +181,14 @@ def button5():
             listofvalues[4].configure(image=poke_image)
         except UnidentifiedImageError:
             print('678 error')
-            ErrorImage = Image.open('amalgamate.png')
+            ErrorImage = Image.open('./images/amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[4].configure(image=poke_image)
 
-        with open('passwords.csv', 'r') as file:
+        with open('./data/passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke5'] = name
-        with open('passwords.csv', 'w') as file:
+        with open('./data/passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke5Label.configure(text=name, text_color='red')
 
@@ -212,14 +212,14 @@ def button6():
             listofvalues[5].configure(image=poke_image)
         except UnidentifiedImageError:
             print('678 error')
-            ErrorImage = Image.open('amalgamate.png')
+            ErrorImage = Image.open('./images/amalgamate.png')
             poke_image = ctk.CTkImage(light_image=ErrorImage, size=(100, 100))
             listofvalues[5].configure(image=poke_image)
 
-        with open('passwords.csv', 'r') as file:
+        with open('./data/passwords.csv', 'r') as file:
             data = pd.read_csv(file)
         data.loc[data['username'] == Username, 'poke6'] = name
-        with open('passwords.csv', 'w') as file:
+        with open('./data/passwords.csv', 'w') as file:
             data.to_csv(file, index=False)
         Poke6Label.configure(text=name, text_color='red')
 
@@ -240,7 +240,7 @@ def LoginButton():
     # Encrypts the password to check in csv #
     Password = hashlib.sha256(Password.encode('utf-8')).hexdigest()
     # Checks and loads the CSV #
-    with open('passwords.csv', 'r') as data:
+    with open('./data/passwords.csv', 'r') as data:
         data = pd.read_csv(data)
         Username2 = data.loc[data['username'] == Username]
         Password2 = Username2.loc[data['password'] == Password]
@@ -272,14 +272,14 @@ def EnterNewData():
 
     data = pd.DataFrame(data=d)
 
-    with open('passwords.csv', 'r') as file:
+    with open('./data/passwords.csv', 'r') as file:
         LoadedData = pd.read_csv(file)
         df = pd.concat([LoadedData, data], ignore_index=True)
         UserNameExists = LoadedData.loc[LoadedData['username'] == NewUsername]
         # Checks if both inputs are empty #
         if UserNameExists.empty and NewUsername and NewPassword:
             # Adds the new login #
-            df.to_csv('passwords.csv', index=False)
+            df.to_csv('./data/passwords.csv', index=False)
             StatusNewLogin.configure(text="Success!",
                                      text_color='green',
                                      font=('ariel', 25, 'bold'))
@@ -518,7 +518,7 @@ def Dictionary():
                 # Puts the image into the label #
                 PokeActualImage.configure(image=poke_image, text="")
             except UnidentifiedImageError:  # 678 error #
-                ErrorImage = Image.open('amalgamate.png')
+                ErrorImage = Image.open('./images/amalgamate.png')
                 poke_image = ctk.CTkImage(light_image=ErrorImage,
                                           size=(100, 100))
                 PokeActualImage.configure(image=poke_image, text="")
@@ -537,45 +537,42 @@ def Dictionary():
 
 
 def MenuPoke():
-    try:
-        for i in range(0, 6):
-            url = "https://pokeapi.co/api/v2/pokemon/"
-            url2 = listofvalues[i].strip()
-            poke_url = url + url2
-            poke_url_response = requests.get(poke_url)
-            poke_url_response.raise_for_status()
-            JsonFile = poke_url_response.json()
-            image_url = JsonFile['sprites']['front_default']
-            image_response = requests.get(image_url)
+    for i in range(0, 6):
+        url = "https://pokeapi.co/api/v2/pokemon/"
+        url2 = listofvalues[i].strip()
+        poke_url = url + url2
+        poke_url_response = requests.get(poke_url)
+        poke_url_response.raise_for_status()
+        JsonFile = poke_url_response.json()
+        image_url = JsonFile['sprites']['front_default']
+        image_response = requests.get(image_url)
 
-            try:
-                poke_image_data = Image.open(
-                    io.BytesIO(
-                        image_response.content))
-                poke_image = ctk.CTkImage(light_image=poke_image_data,
-                                          size=(100, 100))
+        try:
+            poke_image_data = Image.open(
+                io.BytesIO(
+                    image_response.content))
+            poke_image = ctk.CTkImage(light_image=poke_image_data,
+                                      size=(100, 100))
 
-                listofvalues[i] = ctk.CTkLabel(Main,
-                                               image=poke_image,
-                                               text="")
+            listofvalues[i] = ctk.CTkLabel(Main,
+                                           image=poke_image,
+                                           text="")
 
-                listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
-            except UnidentifiedImageError:
-                print('678 error')
-                ErrorImage = Image.open('amalgamate.png')
-                poke_image = ctk.CTkImage(light_image=ErrorImage,
-                                          size=(100, 100))
+            listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
+        except UnidentifiedImageError:
+            print('678 error')
+            ErrorImage = Image.open('./images/amalgamate.png')
+            poke_image = ctk.CTkImage(light_image=ErrorImage,
+                                      size=(100, 100))
 
-                listofvalues[i] = ctk.CTkLabel(Main,
-                                               image=poke_image,
-                                               text="")
+            listofvalues[i] = ctk.CTkLabel(Main,
+                                           image=poke_image,
+                                           text="")
 
-                listofvalues[i].grid(row=i+2,
-                                     column=3,
-                                     padx=10,
-                                     pady=10)
-    except AttributeError:
-        print('Not every slot is full, fill them for images!')
+            listofvalues[i].grid(row=i+2,
+                                 column=3,
+                                 padx=10,
+                                 pady=10)
 
 
 def NoButton():
@@ -584,13 +581,13 @@ def NoButton():
 
 def YesButton():
     # Read the CSV file into a DataFrame
-    data = pd.read_csv('passwords.csv')
+    data = pd.read_csv('./data/passwords.csv')
 
     # Remove the row where the 'username' matches the current username
     data = data[data['username'] != Username]
 
     # Save the updated DataFrame back to the CSV file
-    data.to_csv('passwords.csv', index=False)
+    data.to_csv('./data/passwords.csv', index=False)
 
     # Print confirmation and the updated DataFrame
     print("Account deleted.")
@@ -728,13 +725,9 @@ if LoginSuccess is True:
                          sticky="nsew",
                          rowspan=10)
 
-    # frame_farRight = ctk.CTkFrame(Main, fg_color="white")
-    # frame_farRight.grid(row=0, column=3, sticky="nsew", rowspan=10)
-
     # Lower to background #
     frame_left.lower()
     frame_middle.lower()
-    # frame_right.lower()
 
     # Welcome Label #
     Welcome = ctk.CTkLabel(Main, text="Welcome", font=('arial', 45))
@@ -890,7 +883,7 @@ if LoginSuccess is True:
     button6.grid(row=7, column=2, padx=100, pady=20)
 
     try:
-        OldImage = Image.open("pokedex2.png")
+        OldImage = Image.open("./images/pokedex2.png")
         scale = 0.5
         NewImage = new_size = (OldImage.width * scale, OldImage.height * scale)
         poke_image = ctk.CTkImage(light_image=OldImage, size=NewImage)
