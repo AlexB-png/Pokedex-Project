@@ -299,7 +299,7 @@ def EnterNewData():
     PasswordNewEntry.delete(0, tk.END)
     UsernameNewEntry.delete(0, tk.END)
 
-    # Professor Oak has made a donation! ( Its to show features of my code ) #
+    # Professor Oak has NOT made a donation! You're poor! #
     d = {'username': [NewUsername], 'password': [NewPassword],
          'poke1': [pd.NA],
          'poke2': [pd.NA],
