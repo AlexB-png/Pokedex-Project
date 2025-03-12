@@ -8,6 +8,7 @@ from PIL import Image
 from PIL import UnidentifiedImageError
 import io
 import os
+import random
 
 # Hello :D #
 
@@ -15,6 +16,7 @@ LoginSuccess = False
 NewloginVariable = False
 IWantMoreInfoNOW = False
 fail = False
+Press = False
 
 Movelist = []
 
@@ -445,6 +447,15 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
 
     SelectButton.grid(row=0, column=2)
 
+    RandomButton = ctk.CTkButton(Info,
+                                 text='Random!',
+                                 bg_color='red',
+                                 fg_color='white',
+                                 text_color='red',
+                                 font=('arial', 20, 'bold'),
+                                 command=randompoke)
+    RandomButton.grid(row=1, column=2)
+
     # Pre Labels ( Before updates) #
 
     # Image of selection #
@@ -500,7 +511,19 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     Typelabel.grid(row=4, column=1)
 
 
+def randompoke():
+    global Press
+    if Press != True:
+        SelectBox.delete(0, tk.END)
+        pokemon = random.randint(1, 1025)
+        Press = True
+        SelectBox.insert(0, pokemon)
+        print(pokemon)
+        Dictionary()
+
+
 def Dictionary():
+    global Press
     Input = SelectBox.get()
     if Input.strip() != "":
         # Makes the URL and gets the JSON
@@ -558,8 +581,10 @@ def Dictionary():
             Typelabel.configure(text=TypePokeList)
         else:
             SelectBox.delete(0, tk.END)
+            print(Input)
     else:
         print("Fail")
+    Press = False
 
 
 def MenuPoke():
