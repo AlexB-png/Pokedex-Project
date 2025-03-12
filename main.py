@@ -513,7 +513,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
 
 def randompoke():
     global Press
-    if Press != True:
+    if Press is not True:
         SelectBox.delete(0, tk.END)
         pokemon = random.randint(1, 1025)
         Press = True
