@@ -9,9 +9,11 @@ from PIL import UnidentifiedImageError
 import io
 import os
 import random
+from fuzzywuzzy import fuzz
 
 # Hello :D #
 
+# Variables #
 LoginSuccess = False
 NewloginVariable = False
 IWantMoreInfoNOW = False
@@ -19,6 +21,9 @@ fail = False
 Press = False
 
 Movelist = []
+
+# This is the same font used for a majority of text #
+TextFont = ('arial', 20, 'bold')
 
 # Assume all the buttons have the same comments #
 
@@ -226,6 +231,37 @@ def button6():
         Poke6Label.configure(text=name, text_color='red')
 
 
+def PokeInput():
+    global fail, Selection
+    Selection = PokeInputText.get('1.0', tk.END)
+    PokeInputText.delete('1.0', tk.END)
+    if Selection.strip() == "":
+        print('Failure')
+        fail = True
+    else:
+        print(Selection)
+        try:
+            url = "https://pokeapi.co/api/v2/pokemon/" + Selection
+            url = url.strip()
+            url_response = requests.get(url)
+            if url_response.status_code != 200:
+                Selection = get_label_tags(3, Selection)
+                SimilarList = []
+                try:
+                    for i in range(0, 3):
+                        Selection2 = Selection[i][0]
+                        SimilarList.append(Selection2)
+                    TutorialLabel.configure(text=f"Did you mean {SimilarList}?")
+                except IndexError:
+                    TutorialLabel.configure(text=f"Did you mean {Selection[0][0]}?")
+                fail = True
+            else:
+                fail = False
+        except KeyError:
+            print('ERROR')
+            fail = True
+
+
 # End of button functions #
 
 
@@ -247,7 +283,8 @@ def LoginButton():
         Username2 = data.loc[data['username'] == Username]
         Password2 = Username2.loc[data['password'] == Password]
     if Password2.empty is True:
-        print('Failure')
+        Pep = 'Incorrect Username or Password'
+        UsernameLabel.configure(text=Pep)
     else:
         LoginSuccess = True
         Login.destroy()
@@ -264,12 +301,12 @@ def EnterNewData():
 
     # Professor Oak has made a donation! ( Its to show features of my code ) #
     d = {'username': [NewUsername], 'password': [NewPassword],
-         'poke1': ['pikachu'],
-         'poke2': ['mew'],
-         'poke3': ['mewtwo'],
-         'poke4': ['meowstic-male'],
-         'poke5': ['charizard'],
-         'poke6': ['eevee']
+         'poke1': [pd.NA],
+         'poke2': [pd.NA],
+         'poke3': [pd.NA],
+         'poke4': [pd.NA],
+         'poke5': [pd.NA],
+         'poke6': [pd.NA]
          }
 
     data = pd.DataFrame(data=d)
@@ -372,37 +409,6 @@ def NewLogin():
     StatusNewLogin.grid(row=3, column=0)
 
 
-def PokeInput():
-    global fail, Selection
-    Selection = PokeInputText.get('1.0', tk.END)
-    PokeInputText.delete('1.0', tk.END)
-    if Selection.strip() == "":
-        print('Failure')
-        fail = True
-    else:
-        print(Selection)
-        try:
-            url = "https://pokeapi.co/api/v2/pokemon/" + Selection
-            url = url.strip()
-            url_response = requests.get(url)
-            if url_response.status_code != 200:
-                TutorialLabel.configure(text='Invalid Pokemon',
-                                        text_color='purple',
-                                        font=('ariel', 30, 'bold'))
-                TutorialLabel.update()
-                time.sleep(3)
-                TutorialLabel.configure(text='Pick A Pokemon To Replace',
-                                        text_color='white',
-                                        font=('ariel', 20, 'bold'))
-                TutorialLabel.update()
-                fail = True
-            else:
-                fail = False
-        except KeyError:
-            print('ERROR')
-            fail = True
-
-
 def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     global SelectBox, PokeActualImage, AccNameLabel, MoveLabel, Typelabel
     Info = ctk.CTkToplevel()
@@ -429,7 +435,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
 
     # Modules #
     SelectLabel = ctk.CTkLabel(Info, text='Input Pokemon Here!',
-                               font=('arial', 20, 'bold'),
+                               font=TextFont,
                                bg_color='red',
                                text_color='white')
 
@@ -443,7 +449,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
                                  bg_color='red',
                                  fg_color='white',
                                  text_color='red',
-                                 font=('arial', 20, 'bold'))
+                                 font=TextFont)
 
     SelectButton.grid(row=0, column=2)
 
@@ -452,7 +458,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
                                  bg_color='red',
                                  fg_color='white',
                                  text_color='red',
-                                 font=('arial', 20, 'bold'),
+                                 font=TextFont,
                                  command=randompoke)
     RandomButton.grid(row=1, column=2)
 
@@ -462,20 +468,20 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     PokeLabelImage = ctk.CTkLabel(Info,
                                   text='Pokemon Image:',
                                   bg_color='red',
-                                  font=('arial', 20, 'bold'),
+                                  font=TextFont,
                                   text_color='white')
     PokeLabelImage.grid(row=1, column=0, pady=30)
 
     PokeActualImage = ctk.CTkLabel(Info,
                                    text="IMAGE HERE",
-                                   font=('arial', 20, 'bold'),
+                                   font=TextFont,
                                    bg_color='white',
                                    text_color='red')
     PokeActualImage.grid(row=1, column=1)
 
     # Name of Selection #
     PokeNameLabel = ctk.CTkLabel(Info, text="Name Of pokemon",
-                                 font=('arial', 20, 'bold'),
+                                 font=TextFont,
                                  bg_color='red',
                                  text_color='white')
     PokeNameLabel.grid(row=2, column=0, pady=20)
@@ -490,7 +496,7 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
 
     MoveLabelFirst = ctk.CTkLabel(Info,
                                   text="Moveset:",
-                                  font=('arial', 20, 'bold'),
+                                  font=TextFont,
                                   text_color='white',
                                   bg_color='red')
     MoveLabelFirst.grid(row=3, column=0, pady=20)
@@ -499,13 +505,13 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
     TypePoke = ctk.CTkLabel(Info,
                             text='Types:',
                             text_color='white',
-                            font=('arial', 20, 'bold'),
+                            font=TextFont,
                             bg_color='red')
     TypePoke.grid(row=4, column=0, pady=40)
     # This is the actual type #
     Typelabel = ctk.CTkLabel(Info,
                              text='Input a pokemon!',
-                             font=('arial', 20, 'bold'),
+                             font=TextFont,
                              text_color='red',
                              bg_color='white')
     Typelabel.grid(row=4, column=1)
@@ -539,7 +545,7 @@ def Dictionary():
             AccNameLabel.configure(text=PokemonName,
                                    text_color='red',
                                    bg_color='white',
-                                   font=('arial', 20, 'bold'))
+                                   font=TextFont)
 
             try:
                 # Renders image and puts in the dictionary #
@@ -567,7 +573,7 @@ def Dictionary():
             MoveLabel.configure(text=Movelist,
                                 bg_color='white',
                                 text_color='red',
-                                font=('arial', 20, 'bold'))
+                                font=TextFont)
             MoveLabel.update()
 
             # This just makes the label that says its type #
@@ -589,16 +595,16 @@ def Dictionary():
 
 def MenuPoke():
     for i in range(0, 6):
-        url = "https://pokeapi.co/api/v2/pokemon/"
-        url2 = listofvalues[i].strip()
-        poke_url = url + url2
-        poke_url_response = requests.get(poke_url)
-        poke_url_response.raise_for_status()
-        JsonFile = poke_url_response.json()
-        image_url = JsonFile['sprites']['front_default']
-        image_response = requests.get(image_url)
-
         try:
+            url = "https://pokeapi.co/api/v2/pokemon/"
+            url2 = listofvalues[i]
+            poke_url = url + url2
+            poke_url_response = requests.get(poke_url)
+            poke_url_response.raise_for_status()
+            JsonFile = poke_url_response.json()
+            image_url = JsonFile['sprites']['front_default']
+            image_response = requests.get(image_url)
+
             poke_image_data = Image.open(
                 io.BytesIO(
                     image_response.content))
@@ -611,19 +617,9 @@ def MenuPoke():
 
             listofvalues[i].grid(row=i+2, column=3, padx=10, pady=10)
         except UnidentifiedImageError:
-            print('678 error')
-            ErrorImage = Image.open('./images/amalgamate.png')
-            poke_image = ctk.CTkImage(light_image=ErrorImage,
-                                      size=(100, 100))
-
-            listofvalues[i] = ctk.CTkLabel(Main,
-                                           image=poke_image,
-                                           text="")
-
-            listofvalues[i].grid(row=i+2,
-                                 column=3,
-                                 padx=10,
-                                 pady=10)
+            Unidentified(1, i)
+        except TypeError:
+            Unidentified(0, i)
 
 
 def NoButton():
@@ -700,13 +696,13 @@ def change():
     text = "What would you like to change your username to?"  # PEP8 #
     Label = ctk.CTkLabel(frame,
                          text=text,
-                         font=('arial', 20, 'bold'),
+                         font=TextFont,
                          text_color='white')
     Label.grid(row=0, column=0, sticky='nesw', pady=10, padx=10)
 
     PassLabel = ctk.CTkLabel(frame,
                              text='New Password!',
-                             font=('arial', 20, 'bold'),
+                             font=TextFont,
                              text_color='white')
     PassLabel.grid(row=2, column=0, sticky='nesw', pady=10, padx=10)
 
@@ -721,7 +717,7 @@ def change():
                                 text_color='red',
                                 bg_color='red',
                                 fg_color='white',
-                                font=('arial', 20, 'bold'),
+                                font=TextFont,
                                 command=replace)
     InputButton.grid(row=5, column=0, pady=40)
 
@@ -748,6 +744,76 @@ def replace():
         Main.destroy()
     else:
         Label.configure(text="Username already exists!")
+
+
+def FuncList():
+    # This handles extra fuctions as specified #
+    top = ctk.CTkToplevel()
+    top.resizable(0, 0)
+    top.attributes("-topmost", True)
+
+    # TOP 10 SIMILARITIES #
+    button10 = ctk.CTkButton(top,
+                             text='More info!',
+                             bg_color='red',
+                             fg_color='white',
+                             text_color='red',
+                             font=FontType,
+                             command=top10)
+    button10.grid(row=0, column=0, sticky='ew', padx=20, pady=50)
+
+
+def top10():
+    Top10Level = ctk.CTkToplevel()
+    Top10Level.resizable(0, 0)
+    Top10Level.attributes("-topmost", True)
+
+    pep = 'Do try inputting 678! Professor Oak made an abomination!'
+    # Label
+    Guide = ctk.CTkLabel(Top10Level,
+                         text=pep,
+                         font=FontType,
+                         text_color='red')
+    Guide.grid(row=0, column=0, sticky='nesw', padx=50)
+
+
+def get_similarity_score(LocalArray):
+    return LocalArray[1]
+
+
+def get_label_tags(HowMany, input):
+    url = "https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0"
+    url_Match_response = requests.get(url.strip())
+    matches = url_Match_response.json()
+    LocalArray = []
+    for i in range(1, 1025):
+        pokemon = matches['results'][i]['name']
+        ratio = fuzz.partial_ratio(pokemon, input)
+        LocalArray.append((pokemon, ratio))
+    SortedArray = sorted(LocalArray,
+                         key=get_similarity_score,
+                         reverse=True)[:HowMany]
+    return SortedArray
+
+
+def Unidentified(insert, i):
+    print("Image doesn't exist!")
+    if insert == 1:
+        image = ('./images/amalgamate.png')
+    else:
+        image = ('./images/bigz.png')
+    ErrorImage = Image.open(image)
+    poke_image = ctk.CTkImage(light_image=ErrorImage,
+                              size=(100, 100))
+
+    listofvalues[i] = ctk.CTkLabel(Main,
+                                   image=poke_image,
+                                   text="")
+
+    listofvalues[i].grid(row=i+2,
+                         column=3,
+                         padx=10,
+                         pady=10)
 
 
 # Login Window #
@@ -816,7 +882,7 @@ Login.mainloop()
 
 
 if LoginSuccess is True:
-    global listofvalues
+    global listofvalues, TutorialLabel
     Main = ctk.CTk()
     Main.resizable(0, 0)
 
@@ -868,9 +934,19 @@ if LoginSuccess is True:
                            text_color='red',
                            bg_color='red',
                            fg_color='white',
-                           font=('arial', 20, 'bold'),
+                           font=TextFont,
                            command=change)
     Change.grid(row=0, column=2)
+
+    # Some functionality #
+    FuncButton = ctk.CTkButton(Main,
+                               text='Extra fuctions',
+                               bg_color='white',
+                               fg_color='red',
+                               text_color='white',
+                               font=TextFont,
+                               command=FuncList)
+    FuncButton.grid(row=0, column=3)
 
     # Input Pokemon #
     PokeLabel = ctk.CTkLabel(Main,
@@ -1054,7 +1130,7 @@ if LoginSuccess is True:
                                  text='DELETE ACCOUNT',
                                  bg_color='red',
                                  fg_color='white',
-                                 font=('arial', 20, 'bold'),
+                                 font=TextFont,
                                  text_color='red',
                                  command=DELETEACCOUNT)  # BE CAREFUL #
     DeleteButton.grid(row=8, column=0, pady=20)
