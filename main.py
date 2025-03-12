@@ -402,7 +402,7 @@ def PokeInput():
 
 
 def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
-    global SelectBox, PokeActualImage, AccNameLabel, MoveLabel, SelectLabel
+    global SelectBox, PokeActualImage, AccNameLabel, MoveLabel, Typelabel
     Info = ctk.CTkToplevel()
     Info.resizable(0, 0)  # Dont even try resizing #
     Info.attributes('-topmost', True)
@@ -468,16 +468,11 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
                                  bg_color='red',
                                  text_color='white')
     PokeNameLabel.grid(row=2, column=0, pady=20)
+
     AccNameLabel = ctk.CTkLabel(Info, text='')
     AccNameLabel.grid(row=2, column=1)
 
-    # MoveList of the pokemon #
-    scrollable_frame = ctk.CTkScrollableFrame(Info,
-                                              orientation="horizontal",
-                                              bg_color='white', height=50)
-    scrollable_frame.grid(row=3, column=1, rowspan=5)
-
-    MoveLabel = ctk.CTkLabel(scrollable_frame,
+    MoveLabel = ctk.CTkLabel(Info,
                              text="",
                              font=('ariel', 15, 'bold'))
     MoveLabel.grid(row=3, column=1)
@@ -488,6 +483,21 @@ def MoreInfoPls():  # My variable names are out the window. Im tired :3 #
                                   text_color='white',
                                   bg_color='red')
     MoveLabelFirst.grid(row=3, column=0, pady=20)
+
+    # This is just the label of what the type is #
+    TypePoke = ctk.CTkLabel(Info,
+                            text='Types:',
+                            text_color='white',
+                            font=('arial', 20, 'bold'),
+                            bg_color='red')
+    TypePoke.grid(row=4, column=0, pady=40)
+    # This is the actual type #
+    Typelabel = ctk.CTkLabel(Info,
+                             text='Input a pokemon!',
+                             font=('arial', 20, 'bold'),
+                             text_color='red',
+                             bg_color='white')
+    Typelabel.grid(row=4, column=1)
 
 
 def Dictionary():
@@ -523,13 +533,29 @@ def Dictionary():
                                           size=(100, 100))
                 PokeActualImage.configure(image=poke_image, text="")
 
-            # Also places the moves into a scrollable frame #
-            Moves = JsonFile['moves']
-            for move in Moves:
-                move_name = move['move']['name']
-                Movelist.append(f"'{move_name}'")
-            MoveLabel.configure(text=Movelist)
+            # Also places the moves #
+            Movelist = []
+            for i in range(0, 3):
+                try:
+                    Moves = JsonFile['abilities'][i]['ability']['name']
+                    Movelist.append(Moves)
+                except IndexError:
+                    print('Invalid Move key')
+            MoveLabel.configure(text=Movelist,
+                                bg_color='white',
+                                text_color='red',
+                                font=('arial', 20, 'bold'))
             MoveLabel.update()
+
+            # This just makes the label that says its type #
+            TypePokeList = []
+            for i in range(0, 3):
+                try:
+                    typepoke = JsonFile['types'][i]['type']['name']
+                    TypePokeList.append(typepoke)
+                except IndexError:
+                    print('pokemon move slot done!')
+            Typelabel.configure(text=TypePokeList)
         else:
             SelectBox.delete(0, tk.END)
     else:
@@ -634,20 +660,21 @@ def change():
     ChangeWindow.resizable(0, 0)
     ChangeWindow.attributes('-topmost', True)
     ChangeWindow.geometry('350x300')
-    
+
     # Make the grid expand #
     ChangeWindow.grid_rowconfigure(0, weight=1)
     ChangeWindow.grid_columnconfigure(0, weight=1)
-    
+
     # Frame #
     frame = ctk.CTkFrame(ChangeWindow, fg_color='red')
     frame.grid(row=0, column=0, sticky='nesw')
     frame.grid_rowconfigure(0, weight=1)
     frame.grid_columnconfigure(0, weight=1)
-    
+
     # Modules #
+    text = "What would you like to change your username to?"  # PEP8 #
     Label = ctk.CTkLabel(frame,
-                         text="What would you like to change your username to?", 
+                         text=text,
                          font=('arial', 20, 'bold'),
                          text_color='white')
     Label.grid(row=0, column=0, sticky='nesw', pady=10, padx=10)
@@ -657,13 +684,13 @@ def change():
                              font=('arial', 20, 'bold'),
                              text_color='white')
     PassLabel.grid(row=2, column=0, sticky='nesw', pady=10, padx=10)
-    
+
     InputName = ctk.CTkEntry(frame)
     InputName.grid(row=1, column=0, pady=10)
 
     InputPass = ctk.CTkEntry(frame)
     InputPass.grid(row=3, column=0, pady=10)
-    
+
     InputButton = ctk.CTkButton(frame,
                                 text='Input!',
                                 text_color='red',
@@ -696,8 +723,6 @@ def replace():
         Main.destroy()
     else:
         Label.configure(text="Username already exists!")
-
-
 
 
 # Login Window #
@@ -813,7 +838,13 @@ if LoginSuccess is True:
     Welcome2.grid(row=0, column=1, sticky='ew')
 
     # Change Login Button #
-    Change = ctk.CTkButton(Main, text="Change Name!", text_color='red', bg_color='red', fg_color='white', font=('arial', 20, 'bold'), command=change)
+    Change = ctk.CTkButton(Main,
+                           text="Change Name!",
+                           text_color='red',
+                           bg_color='red',
+                           fg_color='white',
+                           font=('arial', 20, 'bold'),
+                           command=change)
     Change.grid(row=0, column=2)
 
     # Input Pokemon #
