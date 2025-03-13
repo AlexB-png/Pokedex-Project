@@ -759,11 +759,11 @@ def FuncList():
                              fg_color='white',
                              text_color='red',
                              font=FontType,
-                             command=top10)
+                             command=Extras)
     button10.grid(row=0, column=0, sticky='ew', padx=20, pady=50)
 
 
-def top10():
+def Extras():
     Top10Level = ctk.CTkToplevel()
     Top10Level.resizable(0, 0)
     Top10Level.attributes("-topmost", True)
