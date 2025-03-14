@@ -528,69 +528,7 @@ def randompoke():
         Dictionary()
 
 
-def Dictionary():
-    global Press
-    Input = SelectBox.get()
-    if Input.strip() != "":
-        # Makes the URL and gets the JSON
-        url = "https://pokeapi.co/api/v2/pokemon/" + Input
-        url = url.strip()
-        url_response = requests.get(url)
-        # Checks if the server exists #
-        if url_response.status_code == 200:
-            JsonFile = url_response.json()
 
-            PokemonName = JsonFile['name']
-            # Puts the name into the disctionary #
-            AccNameLabel.configure(text=PokemonName,
-                                   text_color='red',
-                                   bg_color='white',
-                                   font=TextFont)
-
-            try:
-                # Renders image and puts in the dictionary #
-                PokemonSprite = JsonFile['sprites']['front_default']
-                PokemonSprite = requests.get(PokemonSprite)
-                poke_image_data = Image.open(io.BytesIO(PokemonSprite.content))
-                poke_image = ctk.CTkImage(light_image=poke_image_data,
-                                          size=(100, 100))
-                # Puts the image into the label #
-                PokeActualImage.configure(image=poke_image, text="")
-            except UnidentifiedImageError:  # 678 error #
-                ErrorImage = Image.open('./images/amalgamate.png')
-                poke_image = ctk.CTkImage(light_image=ErrorImage,
-                                          size=(100, 100))
-                PokeActualImage.configure(image=poke_image, text="")
-
-            # Also places the moves #
-            Movelist = []
-            for i in range(0, 3):
-                try:
-                    Moves = JsonFile['abilities'][i]['ability']['name']
-                    Movelist.append(Moves)
-                except IndexError:
-                    print('Invalid Move key')
-            MoveLabel.configure(text=Movelist,
-                                bg_color='white',
-                                text_color='red',
-                                font=TextFont)
-            MoveLabel.update()
-
-            # This just makes the label that says its type #
-            TypePokeList = []
-            for i in range(0, 3):
-                try:
-                    typepoke = JsonFile['types'][i]['type']['name']
-                    TypePokeList.append(typepoke)
-                except IndexError:
-                    print('pokemon move slot done!')
-            Typelabel.configure(text=TypePokeList)
-        else:
-            SelectBox.delete(0, tk.END)
-            print(Input)
-    else:
-        print("Fail")
-    Press = False
 
 
 def MenuPoke():
@@ -786,7 +724,7 @@ def get_label_tags(HowMany, input):
     url_Match_response = requests.get(url.strip())
     matches = url_Match_response.json()
     LocalArray = []
-    for i in range(1, 1025):
+    for i in range(0, 1025):
         pokemon = matches['results'][i]['name']
         ratio = fuzz.partial_ratio(pokemon, input)
         LocalArray.append((pokemon, ratio))
@@ -814,6 +752,73 @@ def Unidentified(insert, i):
                          column=3,
                          padx=10,
                          pady=10)
+
+
+def Dictionary():
+    global Press
+    Input = SelectBox.get()
+    x = get_label_tags(3, Input)
+    if Input.strip() != "":
+        # Makes the URL and gets the JSON
+        url = "https://pokeapi.co/api/v2/pokemon/" + Input
+        url = url.strip()
+        url_response = requests.get(url)
+        # Checks if the server exists #
+        if url_response.status_code == 200:
+            JsonFile = url_response.json()
+
+            PokemonName = JsonFile['name']
+            # Puts the name into the disctionary #
+            AccNameLabel.configure(text=PokemonName,
+                                   text_color='red',
+                                   bg_color='white',
+                                   font=TextFont)
+
+            try:
+                # Renders image and puts in the dictionary #
+                PokemonSprite = JsonFile['sprites']['front_default']
+                PokemonSprite = requests.get(PokemonSprite)
+                poke_image_data = Image.open(io.BytesIO(PokemonSprite.content))
+                poke_image = ctk.CTkImage(light_image=poke_image_data,
+                                          size=(100, 100))
+                # Puts the image into the label #
+                PokeActualImage.configure(image=poke_image, text="")
+            except UnidentifiedImageError:  # 678 error #
+                ErrorImage = Image.open('./images/amalgamate.png')
+                poke_image = ctk.CTkImage(light_image=ErrorImage,
+                                          size=(100, 100))
+                PokeActualImage.configure(image=poke_image, text="")
+
+            # Also places the moves #
+            Movelist = []
+            for i in range(0, 3):
+                try:
+                    Moves = JsonFile['abilities'][i]['ability']['name']
+                    Movelist.append(Moves)
+                except IndexError:
+                    print('Invalid Move key')
+            MoveLabel.configure(text=Movelist,
+                                bg_color='white',
+                                text_color='red',
+                                font=TextFont)
+            MoveLabel.update()
+
+            # This just makes the label that says its type #
+            TypePokeList = []
+            for i in range(0, 3):
+                try:
+                    typepoke = JsonFile['types'][i]['type']['name']
+                    TypePokeList.append(typepoke)
+                except IndexError:
+                    print('pokemon move slot done!')
+            Typelabel.configure(text=TypePokeList)
+        else:
+            SelectBox.delete(0, tk.END)
+            SelectBox.insert(0, x[0][0])
+            print(Input)
+    else:
+        print("Fail")
+    Press = False
 
 
 # Login Window #
@@ -946,6 +951,7 @@ if LoginSuccess is True:
                              text_color='White',
                              font=('ariel', 20, 'bold'))
     PokeLabel.grid(row=1, column=0)
+    
     PokeInputText = ctk.CTkTextbox(Main, width=300, height=10)
     PokeInputText.grid(row=1, column=1)
 
