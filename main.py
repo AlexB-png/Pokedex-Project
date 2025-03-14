@@ -856,7 +856,7 @@ NewLoginButton = ctk.CTkButton(Login, text="New Login",
 
 # Entry Boxes #
 UsernameEntry = ctk.CTkEntry(Login, bg_color='white')
-PasswordEntry = ctk.CTkEntry(Login, bg_color='white')
+PasswordEntry = ctk.CTkEntry(Login, bg_color='white', show="*")
 
 # PokeDictionary #
 Guest = ctk.CTkButton(Login, text="Guest Account",
@@ -937,16 +937,6 @@ if LoginSuccess is True:
                            font=TextFont,
                            command=change)
     Change.grid(row=0, column=2)
-
-    # Some functionality #
-    FuncButton = ctk.CTkButton(Main,
-                               text='Extra fuctions',
-                               bg_color='white',
-                               fg_color='red',
-                               text_color='white',
-                               font=TextFont,
-                               command=FuncList)
-    FuncButton.grid(row=0, column=3)
 
     # Input Pokemon #
     PokeLabel = ctk.CTkLabel(Main,
