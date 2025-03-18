@@ -41,7 +41,7 @@ def button1():
         # Creates a JSON file out of the response #
         JsonFile = poke_url_response.json()
         # Pulls values from the JSON file #
-        image_url = JsonFile['sprites']['front_default']
+        image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
         name = JsonFile['name']
         # if 678 is input then the amalgamate image is shown #
         try:
@@ -79,7 +79,7 @@ def button2():
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
-        image_url = JsonFile['sprites']['front_default']
+        image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
         name = JsonFile['name']
 
         try:
@@ -112,7 +112,7 @@ def button3():
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
-        image_url = JsonFile['sprites']['front_default']
+        image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
         name = JsonFile['name']
 
         try:
@@ -145,7 +145,7 @@ def button4():
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
-        image_url = JsonFile['sprites']['front_default']
+        image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
         name = JsonFile['name']
         try:
             image_response = requests.get(image_url)
@@ -177,7 +177,7 @@ def button5():
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
-        image_url = JsonFile['sprites']['front_default']
+        image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
         name = JsonFile['name']
 
         try:
@@ -208,7 +208,7 @@ def button6():
         poke_url_response = requests.get(poke_url)
         poke_url_response.raise_for_status()
         JsonFile = poke_url_response.json()
-        image_url = JsonFile['sprites']['front_default']
+        image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
         name = JsonFile['name']
 
         try:
@@ -537,7 +537,7 @@ def MenuPoke():
             poke_url_response = requests.get(poke_url)
             poke_url_response.raise_for_status()
             JsonFile = poke_url_response.json()
-            image_url = JsonFile['sprites']['front_default']
+            image_url = JsonFile['sprites']['other']['official-artwork']['front_default']
             image_response = requests.get(image_url)
 
             poke_image_data = Image.open(
@@ -773,7 +773,7 @@ def Dictionary():
 
             try:
                 # Renders image and puts in the dictionary #
-                PokemonSprite = JsonFile['sprites']['front_default']
+                PokemonSprite = JsonFile['sprites']['other']['official-artwork']['front_default']
                 PokemonSprite = requests.get(PokemonSprite)
                 poke_image_data = Image.open(io.BytesIO(PokemonSprite.content))
                 poke_image = ctk.CTkImage(light_image=poke_image_data,
