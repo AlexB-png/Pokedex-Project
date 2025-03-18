@@ -528,9 +528,6 @@ def randompoke():
         Dictionary()
 
 
-
-
-
 def MenuPoke():
     for i in range(0, 6):
         try:
@@ -951,7 +948,7 @@ if LoginSuccess is True:
                              text_color='White',
                              font=('ariel', 20, 'bold'))
     PokeLabel.grid(row=1, column=0)
-    
+
     PokeInputText = ctk.CTkTextbox(Main, width=300, height=10)
     PokeInputText.grid(row=1, column=1)
 
